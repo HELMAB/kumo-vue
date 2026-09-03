@@ -1,0 +1,67 @@
+Kumo Vue
+Copyright (c) 2026 the Kumo Vue contributors
+
+This product includes work derived from Kumo, a design system by
+Cloudflare, Inc.
+
+    Kumo
+    Copyright (c) 2026 Cloudflare, Inc.
+    https://github.com/cloudflare/kumo
+    Licensed under the MIT License.
+
+The full text of Kumo's licence is reproduced at /LICENSES/kumo-MIT.txt.
+
+What is derived
+---------------
+
+Kumo Vue is an independent implementation for a different framework. No
+Kumo source file is copied verbatim: Kumo is React and Tailwind, this is
+Vue and plain CSS, so every file here was written against Kumo's design
+rather than transcribed from it. What is derived is the design itself.
+
+In packages/tokens - the vocabulary of the token layer:
+
+  * The names of the semantic colour tokens and the roles they denote -
+    surface, text, status, border and interaction roles such as `canvas`,
+    `elevated`, `recessed`, `subtle`, `hairline` and `fill-hover`.
+
+  * The light and dark assignments for most of those roles, expressed
+    against this project's own primitive scales.
+
+  * The type size scale (12 / 13 / 14 / 16px).
+
+In packages/ui - component design, behaviour and appearance:
+
+  * Autocomplete. Its size scale, the free-form value contract that
+    distinguishes it from a combobox, the popup and item dimensions, and
+    the label / description / error field arrangement.
+
+  * Badge. Its variant vocabulary (semantic `primary` / `secondary` /
+    `error` / `warning` / `success` / `info` / `outline` / `beta`, plus
+    the colour palette and the `dot` appearance), its dimensions, and
+    the rule that only four variants carry a status dot.
+
+  * Banner. Its variant and size vocabulary, its dimensions, and the
+    structured title / description / action layout.
+
+  * Button. Its variant, size and shape vocabulary (`primary`,
+    `secondary`, `ghost`, `destructive`, `secondary-destructive`,
+    `outline`; `xs` / `sm` / `base` / `lg`; `base` / `square` / `circle`),
+    the dimensions of each size, the emphasis gradient treatment, and
+    behaviours such as swapping a disabled link for a real button and
+    requiring an accessible name on icon-only buttons. Kumo's Tailwind
+    utility classes were translated into CSS custom properties; the React
+    implementation was not translated line by line.
+
+Files carrying derived content have a one-line header pointing here.
+
+The intent is that a developer familiar with Kumo finds the same words
+and the same behaviour. Where this project diverges - the line-height
+scale, the brand colour, the emphasis gradient range, and several values
+adjusted to meet WCAG AA - those departures are documented in
+packages/tokens/README.md and packages/ui/README.md.
+
+Cloudflare's brand colours and trade marks are not used in this project
+and are not covered by the MIT grant above. The brand token ships as a
+neutral placeholder for consumers to override.
+

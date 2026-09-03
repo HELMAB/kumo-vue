@@ -1,0 +1,40 @@
+{
+  "name": "@kumo-vue/tokens",
+  "version": "0.1.0",
+  "description": "Design tokens for Kumo Vue - semantic colour, spacing, radius and type scales as CSS custom properties and JavaScript values.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./styles": "./dist/tokens.css",
+    "./primitives": "./dist/primitives.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "node scripts/build.js",
+    "contrast": "node scripts/check-contrast.js",
+    "test": "node --test 'test/*.test.js'",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "design-tokens",
+    "vue",
+    "css-custom-properties",
+    "kumo",
+    "design-system"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

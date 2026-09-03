@@ -1,0 +1,11 @@
+{
+  "name": "kumo-vue",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.12.0",
+  "scripts": {
+    "build": "pnpm --filter @kumo-vue/tokens build && pnpm --filter kumo-vue build",
+    "test": "pnpm -r test",
+    "contrast": "pnpm --filter @kumo-vue/tokens contrast && pnpm --filter @kumo-vue/ui contrast"
+  }
+}

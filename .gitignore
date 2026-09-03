@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+.vite/
+demo/
+# Generated from packages/ui by `pnpm --filter kumo-vue build`
+packages/cli/registry/

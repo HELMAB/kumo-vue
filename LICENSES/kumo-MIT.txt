@@ -1,0 +1,9 @@
+PLACEHOLDER - replace with the verbatim text of Kumo's LICENSE file,
+retrieved from https://github.com/cloudflare/kumo/blob/main/LICENSE
+
+The upstream file begins:
+
+    MIT License Copyright (c) 2026 Cloudflare, Inc.
+
+Do not paraphrase or reformat the licence text when replacing this file;
+the MIT terms require the notice be reproduced as-is.

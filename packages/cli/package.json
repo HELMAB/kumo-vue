@@ -1,0 +1,34 @@
+{
+  "name": "kumo-vue",
+  "version": "0.1.0",
+  "description": "Add Kumo Vue components to your Vue 3 project. Copies source into your repo - you own it from there.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "kumo-vue": "bin/kumo-vue.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "registry",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node scripts/build-registry.js",
+    "test": "node --test 'test/*.test.js'",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "vue",
+    "components",
+    "kumo",
+    "design-system",
+    "cli"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}
