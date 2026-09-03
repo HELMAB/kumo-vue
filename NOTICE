@@ -57,6 +57,14 @@ In packages/ui - component design, behaviour and appearance:
     error ring, and the group's legend / description / error
     arrangement.
 
+  * Dialog. Its two ARIA roles and when each applies, the four widths
+    (288 / 384 / 512 / 768px) and the rule that content wider than the
+    dialog scrolls inside it rather than stretching it, the option to
+    refuse dismissal by a click outside, the panel anchored near the
+    top of the viewport over a scrim of the recessed surface, and the
+    title / description / actions arrangement with a close control in
+    the corner.
+
   * Tabs. Its two variants and their dimensions, the sliding indicator,
     the size scale, the horizontal overflow behaviour - drag to scroll,
     the fading scroll controls at a clipped edge, and moving by whole

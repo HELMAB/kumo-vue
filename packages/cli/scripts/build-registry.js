@@ -95,6 +95,18 @@ const COMPONENTS = [
     ],
   },
   {
+    name: "dialog",
+    description: "Modal window over the page, with everything behind it inert.",
+    export: "Dialog",
+    dependencies: ["reka-ui", "@kumo-vue/tokens"],
+    /* The close control in the corner is a square Button. */
+    registryDependencies: ["button"],
+    files: [
+      { source: "dialog/Dialog.vue", path: "dialog/Dialog.vue" },
+      { source: "dialog/index.js", path: "dialog/index.js" },
+    ],
+  },
+  {
     name: "select",
     description: "Choose one option, or several, from a fixed list.",
     export: "Select",

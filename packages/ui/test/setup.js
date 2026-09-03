@@ -45,3 +45,19 @@ if (!globalThis.DOMRect) {
     }
   };
 }
+
+/*
+ * jsdom has no PointerEvent, and Reka's dismissable layer - what closes a
+ * dialog or a popup on a click outside - listens for `pointerdown`. Without
+ * this, that path cannot be exercised at all.
+ */
+if (!globalThis.PointerEvent) {
+  globalThis.PointerEvent = class PointerEvent extends MouseEvent {
+    constructor(type, options = {}) {
+      super(type, options);
+      this.pointerId = options.pointerId ?? 1;
+      this.pointerType = options.pointerType ?? "mouse";
+      this.isPrimary = options.isPrimary ?? true;
+    }
+  };
+}

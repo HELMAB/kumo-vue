@@ -26,6 +26,7 @@ npx kumo-vue@latest add button
 | `Breadcrumbs` | Available |
 | `Button` | Available |
 | `Checkbox` · `CheckboxGroup` | Available |
+| `Dialog` | Available |
 | `Tabs` | Available |
 | `Text` | Available |
 | `Toaster` · `toast` | Available |
@@ -327,6 +328,115 @@ not, and in Vue the parent box is four lines of `computed` in userland —
 
 **No `labelTooltip`.** There is no Tooltip component here yet, as with Button's
 `title`. This will change when Tooltip lands.
+
+## Dialog
+
+A window over the page, with everything behind it inert.
+
+```vue
+<Dialog title="Modal title" description="Lorem ipsum dolor sit amet.">
+  <template #trigger><Button>Open</Button></template>
+  <p>Body copy.</p>
+  <template #footer="{ close }">
+    <Button variant="secondary" @click="close">Cancel</Button>
+    <Button variant="destructive" @click="remove">Delete</Button>
+  </template>
+</Dialog>
+
+<Dialog v-model:open="confirming" role="alertdialog" disable-pointer-dismissal
+        size="sm" title="Delete project?" />
+```
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `open` | `boolean` | — |
+| `defaultOpen` | `boolean` | `false` |
+| `title` `description` | `string` | `""` |
+| `size` | `sm` `base` `lg` `xl` | `base` |
+| `role` | `dialog` `alertdialog` | `dialog` |
+| `disablePointerDismissal` | `boolean` | `false` |
+| `dir` | `ltr` · `rtl` · unset | unset |
+| `to` | `string \| object` | `"body"` |
+| `closable` | `boolean` | `true` |
+| `closeLabel` | `string` | `"Close"` |
+
+Slots: `trigger`, `title`, `description`, `default` and `footer` — the last two
+scoped, receiving `close`. Emits `update:open`, so `v-model:open` works.
+
+Built on **Reka UI's Dialog primitive**, the counterpart to the Base UI one
+Kumo uses. Reka owns the portal, the focus trap, the scroll lock, the escape
+key and the `aria-labelledby` / `aria-describedby` wiring.
+
+**`role="alertdialog"` for anything needing an acknowledgement** — a delete, a
+discard, a warning that cannot be undone — exactly as Kumo splits the two. It
+changes the role and nothing else; refusing a click outside is the separate
+`disablePointerDismissal`, and the two are usually set together.
+
+**Escape closes a dialog with `disablePointerDismissal`.** The prop is named
+for what it does: a pointer outside no longer dismisses. Taking the keyboard's
+route out as well would leave a keyboard user with only the buttons inside, and
+Kumo does not do that either.
+
+**One component, not six.** Kumo composes `Dialog.Root`, `Dialog.Trigger`,
+`Dialog`, `Dialog.Title`, `Dialog.Description` and `Dialog.Close`. Here those
+are props and slots, the same flattening Select makes with its groups. What
+`Dialog.Close` provided — closing from inside the content — is the `close`
+handed to the `default` and `footer` slots, so any control can call it.
+
+**Open state works both ways.** With no `open` prop the dialog keeps its own,
+starting from `defaultOpen`; bind `v-model:open` and the page owns it, `close`
+then reporting the intent rather than acting on it.
+
+**Padding and the corner close are built in.** Kumo's dialog ships bare and
+every example adds `className="p-8"` and its own `Dialog.Close` button. Padding
+here is in the stylesheet, and the close control renders by default —
+`closable` turns it off for a flow that must be answered.
+
+**The panel is anchored near the top, not centred.** Kumo's is `top-8`, and
+`top-16` from its `sm` breakpoint up, so a dialog opens close to where the eye
+already is and does not walk down the screen as it grows. Below that
+breakpoint it is the width of the screen less a margin; above it, `size` takes
+over. The horizontal centring is `inset-inline` and `margin-inline: auto`
+rather than Kumo's `left-1/2 -translate-x-1/2` — that pair is physical, and in
+RTL the translate would drag the panel a whole width off-centre.
+
+**The writing direction travels through the portal.** A dialog hangs off the
+body, so a `dir` set on part of the page — a form, a panel, anything short of
+the document — never reaches it, and an RTL dialog comes out the wrong way
+round. The direction is read from the trigger, where the dialog was written,
+and written onto the panel; `dir` sets it explicitly, and a dialog with no
+trigger inherits from wherever it is portalled, as before.
+
+**The panel caps at the viewport, and the middle scrolls.** Kumo's is
+`overflow-hidden` with no height limit, so a dialog taller than the screen runs
+off the bottom of a page whose scroll is locked, with no way to reach the end
+of it. This is the one behaviour here that is not Kumo's. What scrolls is the
+region between the header and the footer — the title, the close control and
+the actions stay where they are, rather than sliding off the top and bottom
+with the content. The panel itself still clips in both axes, as Kumo's does.
+
+**Width is a custom property, not a utility class.** Kumo's "custom max width"
+is `max-w-lg` on the panel. The equivalent is `--kv-dialog-width`, which is
+what the `size` classes set:
+
+```css
+.kv-dialog { --kv-dialog-width: 20rem; }
+```
+
+It is a width rather than a maximum on purpose, as in Kumo: the dialog holds
+its width whatever is inside it. Wide content — a table, a code block — is
+clipped by the panel and needs a scrolling container of its own, exactly as in
+Kumo's examples; the panel itself never scrolls sideways, which would carry the
+title and the close control off the screen along with the content. The panel sets its own
+`box-sizing`, as Toast does — Kumo gets border-box from Tailwind's preflight,
+which nothing here assumes is loaded.
+
+**No dangling `aria-describedby`.** Reka points the attribute at its
+description id whether or not a description was rendered; a dialog without one
+drops the attribute instead of referencing an element that does not exist.
+
+**Motion is dropped under `prefers-reduced-motion`** — both the backdrop fade
+and the panel's scale-in.
 
 ## Tabs
 
