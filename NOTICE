@@ -61,6 +61,12 @@ In packages/ui - component design, behaviour and appearance:
     the fading scroll controls at a clipped edge, and moving by whole
     tabs - and the choice to render a tab bar with no panels.
 
+  * Toast. Its variants and their icons, tints and accent rings, the
+    dimensions and corner of the viewport, the collapsed stack that
+    expands on hover, swipe-to-dismiss, the actions row and the
+    corner close control, and the manager's `add` / `update` /
+    `promise` shape including the bump-on-duplicate rule.
+
   * Select. Its size scale, trigger and popup dimensions, the option
     and group-label styling, and the required / optional label
     convention.

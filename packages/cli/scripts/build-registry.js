@@ -118,6 +118,20 @@ const COMPONENTS = [
     ],
   },
   {
+    name: "toast",
+    description: "Toast notifications: a queue, a viewport, and the stack it draws.",
+    export: "Toaster",
+    dependencies: ["reka-ui", "@kumo-vue/tokens"],
+    /* Actions and the dismiss control are Buttons. */
+    registryDependencies: ["button"],
+    files: [
+      { source: "toast/Toast.vue", path: "toast/Toast.vue" },
+      { source: "toast/Toaster.vue", path: "toast/Toaster.vue" },
+      { source: "toast/manager.js", path: "toast/manager.js" },
+      { source: "toast/index.js", path: "toast/index.js" },
+    ],
+  },
+  {
     name: "button",
     description: "Action trigger with six variants, four sizes and icon-only shapes.",
     export: "Button",

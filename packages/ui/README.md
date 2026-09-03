@@ -27,6 +27,7 @@ npx kumo-vue@latest add button
 | `Button` | Available |
 | `Checkbox` · `CheckboxGroup` | Available |
 | `Tabs` | Available |
+| `Toaster` · `toast` | Available |
 | `Select` | Available |
 
 ## Autocomplete
@@ -401,6 +402,98 @@ the fading controls, and the smooth scrolling, which Kumo animates regardless.
 **No `className` / `listClassName` / `indicatorClassName`.** Class props exist
 in Kumo because its styling is Tailwind utilities. Here the classes are
 `kv-tabs__list` and `kv-tabs__indicator` in a stylesheet you own.
+
+## Toast
+
+Notifications that stack in the corner, expand when you point at them, and can
+be swiped away.
+
+```vue
+<!-- once, near the root of the app -->
+<Toaster />
+```
+
+```js
+import { toast } from "@/components/ui/toast";
+
+toast.add({ title: "Saved", description: "Your changes are live." });
+toast.add({ title: "Deployment failed", description: err.message, variant: "error" });
+
+toast.promise(deploy(), {
+  loading: { title: "Deploying…" },
+  success: (worker) => ({ title: "Deployed!", description: worker.name, variant: "success" }),
+  error: (error) => ({ title: "Deployment failed", description: error.message, variant: "error" }),
+});
+```
+
+### The queue
+
+| Method | Notes |
+| --- | --- |
+| `add(options)` | Returns the toast's id. Re-adding a live id bumps it instead of stacking a duplicate |
+| `update(id, patch)` | Changes a toast in place; ignores ids that have gone |
+| `close(id)` | Starts it leaving; it animates out and then drops itself |
+| `clear()` | Closes everything — on a route change, say |
+| `promise(p, { loading, success, error })` | Returns `p`, so the caller can still await it |
+
+`add` options: `title`, `description`, `variant` (`default` `success` `error`
+`warning` `info`), `actions`, `duration`, `id`. An action is a `Button`'s props
+plus a `label` and an `onClick`.
+
+### `<Toaster>`
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `manager` | a queue from `createToastManager()` | the shared one |
+| `duration` | `number` | `5000` |
+| `limit` | `number` | `3` |
+| `to` | portal target | `"body"` |
+| `label` | `string` | `"Notifications ({hotkey})"` |
+| `announceLabel` `closeLabel` | `string` | `"Notification"` · `"Close"` |
+| `swipeDirection` | `right` `left` `up` `down` | `right` |
+
+Slots: `toast` (scoped, receiving `toast`) to render the body yourself,
+and a default slot for the tree a scoped queue belongs to.
+
+Built on **Reka UI's Toast primitive**, which owns the countdown, the pause
+while the pointer is over the viewport, the swipe gesture and the live region.
+Base UI ships a toast *manager*; Reka does not, so the queue is written here —
+which is why it is `manager.js`, a plain module with no DOM in it that can be
+tested directly.
+
+**The queue is a module, not a provider.** Kumo wraps the app in `<Toasty>` so
+a React context can carry the manager, and needs `createKumoToastManager()`
+threaded through it to raise a toast from outside the tree. Here `toast` is
+imported wherever it is needed — an HTTP interceptor, a store action, a timer —
+and `<Toaster />` only has to exist somewhere on the page. `createToastManager()`
+still gives you an isolated queue, `<Toaster :manager>` renders it, and
+`useToast()` finds it from inside that Toaster's children.
+
+**Actions take a `label`.** Kumo passes React's `children` through its action
+props; a Vue prop object cannot carry a slot, so the text is a `label` and
+everything else is still `Button` props.
+
+**Kumo's `bump` is the default, not a flag.** Adding a toast whose id is
+already on screen bumps the one showing rather than stacking a duplicate —
+useful when a retry keeps failing. Kumo does this too, through a manager
+wrapper that resets the animation across two frames; here it is a counter on
+the toast, which the animation keys off.
+
+**Motion is dropped under `prefers-reduced-motion`**: the stack still opens and
+closes, without sliding, scaling or animating out. Kumo animates regardless,
+and a toast that slides and scales is exactly what the setting is asking about.
+
+**Timers live in the primitive, not the queue.** Reka's `ToastRoot` already
+counts down, pauses while the pointer is over the viewport and resumes after,
+so a second timer in the store would only be a second source of truth. A
+`duration` of `Infinity` — what `promise` gives its loading toast — never times
+out.
+
+**The stack is measured, not guessed.** Each toast reports its height, and the
+expanded offsets are the sum of what is in front plus a gap. It is measured
+from the *content*, not the toast: an earlier version measured the toast
+itself, whose height the measurement then set, and the stack collapsed to its
+own padding.
 
 ## Select
 
