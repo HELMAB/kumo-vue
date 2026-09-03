@@ -117,7 +117,9 @@ delimits an actual control — an input border, a checkbox outline — needs
 - **Space** — `--kv-space-0` through `--kv-space-20` on a 0.25rem base, with
   half-steps at the low end. Decimal steps use a hyphen: `--kv-space-1-5`.
 - **Radius** — `--kv-radius-none` `-sm` `-md` `-lg` `-xl` `-full`.
-- **Type size** — `--kv-text-xs` (12px) `-sm` (13px) `-base` (14px) `-lg` (16px).
+- **Type size** — `--kv-text-xs` (12px) `-sm` (13px) `-base` (14px) `-lg` (16px)
+  `-xl` (20px) `-2xl` (24px) `-3xl` (30px). The three largest are the heading
+  steps; the body scale stops at `lg`.
 - **Line height** — `--kv-leading-tight` (1.4) `-normal` (1.5) `-relaxed` (1.7)
   `-loose` (1.9).
 - **Font** — `--kv-font-sans` `--kv-font-mono`.

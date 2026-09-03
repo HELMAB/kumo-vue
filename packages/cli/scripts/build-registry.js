@@ -118,6 +118,17 @@ const COMPONENTS = [
     ],
   },
   {
+    name: "text",
+    description: "Typography: headings, copy and monospace at the system's sizes.",
+    export: "Text",
+    dependencies: ["reka-ui", "@kumo-vue/tokens"],
+    registryDependencies: [],
+    files: [
+      { source: "text/Text.vue", path: "text/Text.vue" },
+      { source: "text/index.js", path: "text/index.js" },
+    ],
+  },
+  {
     name: "toast",
     description: "Toast notifications: a queue, a viewport, and the stack it draws.",
     export: "Toaster",

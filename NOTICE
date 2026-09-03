@@ -28,7 +28,8 @@ In packages/tokens - the vocabulary of the token layer:
   * The light and dark assignments for most of those roles, expressed
     against this project's own primitive scales.
 
-  * The type size scale (12 / 13 / 14 / 16px).
+  * The type size scale (12 / 13 / 14 / 16px), and the heading steps
+    above it (20 / 24 / 30px).
 
 In packages/ui - component design, behaviour and appearance:
 
@@ -66,6 +67,13 @@ In packages/ui - component design, behaviour and appearance:
     expands on hover, swipe-to-dismiss, the actions row and the
     corner close control, and the manager's `add` / `update` /
     `promise` shape including the bump-on-duplicate rule.
+
+  * Text. Its variant vocabulary (`heading`, `body`, `secondary`,
+    `success`, `error`, `mono`, `mono-secondary`, and the deprecated
+    `heading1` / `heading2` / `heading3`), the size each variant renders
+    at, the rule that monospace sits one step below the copy beside it,
+    the separation of visual variant from rendered element, and the
+    truncation behaviour.
 
   * Select. Its size scale, trigger and popup dimensions, the option
     and group-label styling, and the required / optional label

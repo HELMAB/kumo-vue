@@ -313,12 +313,19 @@ export const radius = {
  * Type sizes, carried over from Kumo unchanged. The scale is deliberately
  * compact - 14px body, not 16px - which is what gives Kumo its dense,
  * control-panel feel.
+ *
+ * The three sizes above `lg` are the heading steps. Kumo remaps Tailwind's
+ * `xs` through `lg` to the compact values below and leaves `xl`, `2xl` and
+ * `3xl` at Tailwind's defaults, which is where 20 / 24 / 30px come from.
  */
 export const fontSize = {
   xs: "0.75rem",
   sm: "0.8125rem",
   base: "0.875rem",
   lg: "1rem",
+  xl: "1.25rem",
+  "2xl": "1.5rem",
+  "3xl": "1.875rem",
 };
 
 /**

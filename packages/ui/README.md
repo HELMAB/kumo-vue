@@ -27,6 +27,7 @@ npx kumo-vue@latest add button
 | `Button` | Available |
 | `Checkbox` · `CheckboxGroup` | Available |
 | `Tabs` | Available |
+| `Text` | Available |
 | `Toaster` · `toast` | Available |
 | `Select` | Available |
 
@@ -494,6 +495,79 @@ expanded offsets are the sum of what is in front plus a gap. It is measured
 from the *content*, not the toast: an earlier version measured the toast
 itself, whose height the measurement then set, and the stack collapsed to its
 own padding.
+
+## Text
+
+Typography: headings, copy and monospace at the sizes the system knows about.
+
+```vue
+<Text>Body copy.</Text>
+<Text variant="heading" size="lg" as="h1">Page title</Text>
+<Text variant="secondary" size="sm">Helper text</Text>
+<Text variant="mono">console.log("code")</Text>
+<Text truncate>A single line that gets cut off…</Text>
+```
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `variant` | `heading` `body` `secondary` `success` `error` `mono` `mono-secondary` · deprecated: `heading1` `heading2` `heading3` | `body` |
+| `size` | `xs` `sm` `base` `lg` | `base` |
+| `bold` | `boolean` | `false` |
+| `truncate` | `boolean` | `false` |
+| `as` | `string \| object` | `p` for copy, `span` otherwise |
+| `asChild` | `boolean` | `false` |
+
+The sizes each variant actually renders, matching Kumo:
+
+| Variant | `xs` | `sm` | `base` | `lg` |
+| --- | --- | --- | --- | --- |
+| copy — `body` `secondary` `success` `error` | 12px | 13px | 14px | 16px |
+| `heading` | 16px | 16px | 16px | 20px |
+| `mono` `mono-secondary` | 13px | 13px | 13px | 14px |
+
+**`variant` is presentation; `as` is meaning.** A heading variant renders a
+`<span>` until you say otherwise, so heading-shaped text never joins the
+document outline by accident — Kumo's rule, and the reason `<Text
+variant="heading" as="h2">` is the way to write a real section heading.
+
+**Monospace sits one step below the copy beside it.** A mono face at the same
+nominal size reads larger, so `mono` is 13px where `body` is 14px. Kumo's
+adjustment, kept.
+
+**`bold` is copy-only**, as Kumo's types enforce. Here it is ignored on the
+other variants, with a development warning rather than a compile error — the
+same runtime stand-in Button uses for icon-only names.
+
+**Copy sets a line height rather than inheriting one.** Kumo writes every copy
+size as `text-sm/[inherit]` and so on, which composes nicely and falls back to
+the browser's `normal` — about 1.2 — when nothing above sets one. That clips
+Khmer subscripts, Thai vowel marks and Devanagari matras, which is exactly why
+[the line-height scale here is floored at 1.4](../tokens/README.md). Copy and
+monospace get a line height; override it in your own CSS if you want Kumo's
+inheriting behaviour back.
+
+**`success` is blue, because it is blue upstream.** Kumo's `success` text
+variant resolves to `text-kumo-link`, not a green — visible in its own
+`KUMO_TEXT_STYLING` table. This port matches it. For the green, point the rule
+at `--kv-text-success`:
+
+```css
+.kv-text--success { color: var(--kv-text-success); }
+```
+
+**`heading1` `heading2` `heading3` are deprecated on arrival.** They are
+deprecated upstream too, and warn in development here exactly as they do there,
+because code being ported from Kumo still uses them. Use `heading` with a
+`size` and an `as`.
+
+**`class` and `style` pass straight through.** Kumo hides them behind
+`DANGEROUS_className` and `DANGEROUS_style` to keep typography locked down;
+that convention buys nothing in Vue, where attributes fall through to the
+element.
+
+**The three heading sizes are new tokens.** `--kv-text-xl` (20px), `-2xl`
+(24px) and `-3xl` (30px) were added to the token package for this component —
+the body scale stops at `lg`, and headings need the steps above it.
 
 ## Select
 
