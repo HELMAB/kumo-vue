@@ -50,6 +50,17 @@ In packages/ui - component design, behaviour and appearance:
     an ellipsis on narrow viewports, the loading skeleton on the current
     crumb, and the hover-revealed deeplink copy button.
 
+  * Checkbox. Its dimensions and radius, the contrast fill and inverse
+    tick of the checked and indeterminate states, the extended pointer
+    target around the box, the control-first / label-first layouts, the
+    error ring, and the group's legend / description / error
+    arrangement.
+
+  * Tabs. Its two variants and their dimensions, the sliding indicator,
+    the size scale, the horizontal overflow behaviour - drag to scroll,
+    the fading scroll controls at a clipped edge, and moving by whole
+    tabs - and the choice to render a tab bar with no panels.
+
   * Select. Its size scale, trigger and popup dimensions, the option
     and group-label styling, and the required / optional label
     convention.

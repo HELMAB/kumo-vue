@@ -83,6 +83,18 @@ const COMPONENTS = [
     ],
   },
   {
+    name: "checkbox",
+    description: "Checkbox with a built-in label, and a group sharing one array value.",
+    export: "Checkbox",
+    dependencies: ["reka-ui", "@kumo-vue/tokens"],
+    registryDependencies: ["shared"],
+    files: [
+      { source: "checkbox/Checkbox.vue", path: "checkbox/Checkbox.vue" },
+      { source: "checkbox/CheckboxGroup.vue", path: "checkbox/CheckboxGroup.vue" },
+      { source: "checkbox/index.js", path: "checkbox/index.js" },
+    ],
+  },
+  {
     name: "select",
     description: "Choose one option, or several, from a fixed list.",
     export: "Select",
@@ -91,6 +103,18 @@ const COMPONENTS = [
     files: [
       { source: "select/Select.vue", path: "select/Select.vue" },
       { source: "select/index.js", path: "select/index.js" },
+    ],
+  },
+  {
+    name: "tabs",
+    description: "Segmented or underline tab bar with an animated indicator.",
+    export: "Tabs",
+    dependencies: ["reka-ui", "@kumo-vue/tokens"],
+    registryDependencies: ["shared"],
+    files: [
+      { source: "tabs/Tabs.vue", path: "tabs/Tabs.vue" },
+      { source: "tabs/useTabsScroll.js", path: "tabs/useTabsScroll.js" },
+      { source: "tabs/index.js", path: "tabs/index.js" },
     ],
   },
   {

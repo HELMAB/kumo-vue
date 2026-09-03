@@ -10,11 +10,28 @@ if (!Element.prototype.scrollIntoView) {
   Element.prototype.scrollIntoView = () => {};
 }
 
+/*
+ * A real ResizeObserver delivers one entry as soon as it observes an element.
+ * Anything that measures on that first delivery - the Tabs indicator, which
+ * only renders once it knows how wide the active tab is - never renders at all
+ * against a stub that stays silent. The sizes are all zero in jsdom, but the
+ * delivery is what the code under test is waiting for.
+ */
 if (!globalThis.ResizeObserver) {
   globalThis.ResizeObserver = class {
-    observe() {}
+    constructor(callback) {
+      this.callback = callback;
+    }
+
+    observe(target) {
+      queueMicrotask(() => this.callback?.([{ target }], this));
+    }
+
     unobserve() {}
-    disconnect() {}
+
+    disconnect() {
+      this.callback = undefined;
+    }
   };
 }
 

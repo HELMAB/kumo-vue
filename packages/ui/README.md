@@ -25,6 +25,8 @@ npx kumo-vue@latest add button
 | `Banner` | Available |
 | `Breadcrumbs` | Available |
 | `Button` | Available |
+| `Checkbox` · `CheckboxGroup` | Available |
+| `Tabs` | Available |
 | `Select` | Available |
 
 ## Autocomplete
@@ -227,6 +229,178 @@ leaving in English.
 
 **Links underline on hover.** Kumo's crumbs are static, which gives no
 indication that they are clickable before you click one.
+
+## Checkbox
+
+A control toggled between checked, unchecked and indeterminate, with its label
+built in.
+
+```vue
+<Checkbox v-model="agreed" label="Accept terms and conditions" />
+<Checkbox v-model="remember" label="Remember me" :control-first="false" />
+<Checkbox label="Invalid option" error />
+
+<CheckboxGroup
+  v-model="prefs"
+  :items="options"
+  legend="Email preferences"
+  description="Choose how you'd like to receive updates"
+/>
+```
+
+### Checkbox
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `modelValue` | `boolean` · `"indeterminate"` | — |
+| `indeterminate` | `boolean` | `false` |
+| `label` | `string` | `""` |
+| `error` | `boolean` · `string` | `false` |
+| `description` | `string` | `""` |
+| `controlFirst` | `boolean` | `true` |
+| `disabled` | `boolean` | `false` |
+| `required` | `true` · `false` · unset | unset |
+| `name` `value` `id` | `string` | — · `"on"` · generated |
+
+Slot: `label`. Emits `update:modelValue`.
+
+### CheckboxGroup
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `modelValue` | `unknown[]` | `[]` |
+| `items` | `string[]` · `{ label, value, disabled }[]` | `[]` |
+| `legend` | `string` | `""` |
+| `legendHidden` | `boolean` | `false` |
+| `description` `error` | `string` | `""` |
+| `disabled` | `boolean` | `false` |
+| `controlFirst` | `boolean` | `true` |
+| `name` | `string` | — |
+
+Slots: `legend`, `item` (scoped, receiving `item`, `option` and `index`).
+Emits `update:modelValue`.
+
+Built on **Reka UI's Checkbox and CheckboxGroup primitives** — the counterparts
+to the Base UI ones Kumo uses. Reka owns the `role="checkbox"` /
+`aria-checked="mixed"` contract, space-to-toggle, and the hidden input that
+makes the control submit with a form.
+
+**The group takes `items`, not `Checkbox.Item` children.** Same reasoning as
+Select and Autocomplete, and the same `{ label, value, disabled }` shape,
+normalised by the same `items.js` helper. `Checkbox.Legend` becomes the
+`legend` prop, the `legend` slot, and `legendHidden` for Kumo's `sr-only`
+example — this port has no utility class layer to reach for.
+
+**`error` is one prop, not a variant plus a message.** Kumo has
+`variant="error"` on a checkbox for the red ring and makes you wrap it in a
+group to get any text; here `:error="true"` is that ring and `error="..."`
+draws it *and* renders the message. A group's `error` propagates the ring to
+every box in it, so the per-item `variant="error"` Kumo's own example repeats
+by hand is not needed.
+
+**Indeterminate stays a separate prop**, as in Kumo: clicking a mixed box
+checks it and leaves clearing the flag to you. Reka carries the mixed state
+inside the value instead, so `v-model="'indeterminate'"` also works if you
+prefer that.
+
+**Tab reaches every box in a group.** Reka's `CheckboxGroupRoot` defaults to
+roving focus — one tab stop, arrow keys between boxes — which is radio-group
+behaviour, not checkbox behaviour, and contradicts what Kumo's own
+documentation promises. It is switched off.
+
+**The group's messages are wired up.** Kumo renders the error and description
+as bare `<p>`s that nothing points at; here the fieldset carries
+`aria-describedby`, and an error also sets `aria-invalid` on each box. Kumo
+renders both its error and its description at once even though its docs say the
+error replaces the description — this follows the documented behaviour, and
+Select's.
+
+**A missing accessible name warns in development**, the same runtime stand-in
+for Kumo's TypeScript prop types that Button uses for icon-only buttons.
+
+**There is no `allValues` select-all.** Base UI's group takes it; Reka's does
+not, and in Vue the parent box is four lines of `computed` in userland —
+`:model-value="allChecked"`, `:indeterminate="someChecked"` and an
+`@update:model-value` that sets the array. The demo app shows it.
+
+**No `labelTooltip`.** There is no Tooltip component here yet, as with Button's
+`title`. This will change when Tooltip lands.
+
+## Tabs
+
+A bar of tabs, in the segmented or underline style, with an indicator that
+slides to the selected one.
+
+```vue
+<Tabs v-model="tab" :items="['Overview', 'Analytics', 'Settings']" label="Sections" />
+
+<Tabs v-model="tab" :items="tabs" variant="underline" size="sm" />
+
+<Tabs v-model="tab" :items="[{ label: 'Docs', value: 'docs', href: '/docs' }]" :link-as="RouterLink" />
+```
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `modelValue` | `string` · `number` | — |
+| `defaultValue` | `string` · `number` | — |
+| `items` | `string[]` · `{ label, value, disabled, href }[]` | `[]` |
+| `variant` | `segmented` `underline` | `segmented` |
+| `size` | `base` `sm` | `base` |
+| `activateOnFocus` | `boolean` | `false` |
+| `linkAs` | `string \| object` | `"a"` |
+| `dir` | `ltr` · `rtl` · unset | unset |
+| `label` | `string` | — |
+| `scrollStartLabel` `scrollEndLabel` | `string` | `"Scroll tabs to the start"` · `"…to the end"` |
+
+Slot: `tab` (scoped, receiving `item`, `option` and `index`). Emits
+`update:modelValue`.
+
+Built on **Reka UI's Tabs primitive**, the counterpart to the Base UI one Kumo
+uses. Reka owns the `role="tablist"` / `role="tab"` contract, arrow-key
+navigation, and the measurements the indicator slides between.
+
+**The bar renders no panels**, as Kumo's does not: a tab selects a value and
+the page decides what that means. Reka points a tab at a panel only when one
+exists, so nothing is left with a dangling `aria-controls`.
+
+**`items`, not `tabs`.** The only renamed prop — every component here that
+takes a list takes `items`, normalised by the same `items.js` helper, so plain
+strings work too. Kumo's `selectedValue` is `defaultValue`, and
+`value` / `onValueChange` are `v-model`.
+
+**Link tabs are `href`, not a render prop.** Kumo passes a `render` function to
+turn a tab into a link; here an item with an `href` renders as one, through
+`linkAs` — `RouterLink` and `NuxtLink` get `to`, a plain `a` gets `href`, the
+same contract as Breadcrumbs.
+
+**Overflow controls appear for both variants.** Kumo renders them for
+`segmented` only, though its own control carries styling for the other; an
+underline bar overflows just the same. Press one and the list moves by whole
+tabs, so nothing is left half-shown.
+
+**RTL works without configuration**, which took two fixes upstream does not
+have. Reka *asks* for a writing direction and defaults to `ltr`, then writes
+that onto the element — overriding an `rtl` inherited from the page and
+flipping the whole bar back. The inherited direction is read from the nearest
+`dir` instead, and `dir` is a prop when you want to say so explicitly. And the
+scroll controls compare `Math.abs(scrollLeft)`: the raw value counts *down*
+from zero in RTL, so Kumo's comparison reports "can scroll to the start" the
+moment an RTL list is scrolled at all, and its arrows scroll the wrong way.
+
+**The indicator is the one thing anchored physically.** Reka reports the active
+tab's `offsetLeft`, which is measured from the left edge in both directions, so
+mirroring it would put the indicator under the wrong tab in RTL.
+
+**The scroll arithmetic lives in `useTabsScroll.js`**, next to the component
+and separately testable — jsdom gives nothing a size, so the overflow maths is
+exercised against plain numbers rather than a list that can never overflow.
+
+**Motion is dropped under `prefers-reduced-motion`** — the sliding indicator,
+the fading controls, and the smooth scrolling, which Kumo animates regardless.
+
+**No `className` / `listClassName` / `indicatorClassName`.** Class props exist
+in Kumo because its styling is Tailwind utilities. Here the classes are
+`kv-tabs__list` and `kv-tabs__indicator` in a stylesheet you own.
 
 ## Select
 
