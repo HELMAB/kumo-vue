@@ -23,6 +23,7 @@ npx kumo-vue@latest add button
 | `Autocomplete` | Available |
 | `Badge` | Available |
 | `Banner` | Available |
+| `Breadcrumbs` | Available |
 | `Button` | Available |
 | `Select` | Available |
 
@@ -161,6 +162,71 @@ component for the label, description and error. Those are props here, wired to
 **No `Banner.Action` compound.** Kumo ships an accent-aware CTA that reads the
 banner variant through React context. Here the `action` slot takes any element,
 so a `Button` goes straight in.
+
+## Breadcrumbs
+
+The trail showing where the current page sits in a hierarchy.
+
+```vue
+<Breadcrumbs :items="[
+  { label: 'Home', href: '/' },
+  { label: 'Docs', href: '/docs' },
+  { label: 'Breadcrumbs' },
+]" />
+
+<Breadcrumbs :items="trail" :link-as="RouterLink" clipboard="https://dash.example.com/here" loading>
+  <template #icon="{ index }"><HomeIcon v-if="index === 0" /></template>
+</Breadcrumbs>
+```
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `items` | `string[]` · `{ label, href, icon, current }[]` | `[]` |
+| `size` | `sm` `base` | `base` |
+| `loading` | `boolean` | `false` |
+| `clipboard` | `string` | `""` |
+| `linkAs` | `string \| object` | `"a"` |
+| `label` | `string` | `"Breadcrumb"` |
+| `copyLabel` `copiedLabel` | `string` | `"Copy link"` · `"Copied"` |
+
+Slots: `item` and `icon` (both scoped, receiving `item`, `crumb` and `index`),
+`separator`. Emits `copy` with the text once it is on the clipboard.
+
+**A trail is a list.** Kumo renders a flat run of `div`s inside the `nav`; this
+renders `nav > ol > li`, so a screen reader announces how many crumbs there are
+and where in them you are. The current crumb still carries `aria-current="page"`.
+
+**The last crumb is the current page** unless one sets `current: true`. It is
+the only crumb allowed to truncate — letting every crumb shrink proportionally
+turns the trail into unreadable stubs (`Com… › Anal… › Acco…`), which is Kumo's
+reasoning too. A current crumb with an `href` renders as text, not a link: you
+are already there.
+
+**Collapsing is CSS, not JavaScript.** Below 640px Kumo keeps the last two
+crumbs and an ellipsis, and gets there by rebuilding the child list in React.
+Here the whole trail is rendered once and the middle is hidden by a media
+query, so the markup does not change with the viewport and nothing re-runs on
+resize. The ellipsis is only in the DOM when there is something for it to
+stand in for.
+
+**Router links get `to`, anchors get `href`.** Kumo hands its link component
+both and lets it choose, which quietly leaves a stale `href` on a router link.
+Set `linkAs` to `RouterLink`, `NuxtLink` or your own component and each crumb's
+`href` is passed as `to`; the default `a` gets `href`.
+
+**The copy button appears on focus, not only on hover.** Kumo fades it in on
+`group-hover` alone, so anyone tabbing to it moves focus to something invisible.
+It is revealed on keyboard focus here as well, and stays up for the two seconds
+it spends confirming a copy. It is a ghost `Button`, so `add breadcrumbs`
+brings Button with it.
+
+**Its strings are props.** Kumo hardcodes `aria-label="breadcrumb"`, `"Copy"`
+and `"Click to copy"`. `label`, `copyLabel` and `copiedLabel` take translated
+text, which a library that ships logical properties for RTL should not be
+leaving in English.
+
+**Links underline on hover.** Kumo's crumbs are static, which gives no
+indication that they are clickable before you click one.
 
 ## Select
 

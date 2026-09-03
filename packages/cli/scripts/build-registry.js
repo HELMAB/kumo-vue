@@ -71,6 +71,18 @@ const COMPONENTS = [
     ],
   },
   {
+    name: "breadcrumbs",
+    description: "Navigation trail showing where the current page sits in a hierarchy.",
+    export: "Breadcrumbs",
+    dependencies: ["reka-ui", "@kumo-vue/tokens"],
+    /* The copy button is a ghost Button, so `add breadcrumbs` brings one along. */
+    registryDependencies: ["button"],
+    files: [
+      { source: "breadcrumbs/Breadcrumbs.vue", path: "breadcrumbs/Breadcrumbs.vue" },
+      { source: "breadcrumbs/index.js", path: "breadcrumbs/index.js" },
+    ],
+  },
+  {
     name: "select",
     description: "Choose one option, or several, from a fixed list.",
     export: "Select",

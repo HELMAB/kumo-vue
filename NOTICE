@@ -44,6 +44,12 @@ In packages/ui - component design, behaviour and appearance:
   * Banner. Its variant and size vocabulary, its dimensions, and the
     structured title / description / action layout.
 
+  * Breadcrumbs. Its size vocabulary (`sm` / `base`) and row heights,
+    the chevron separator, the rule that ancestors do not shrink while
+    the current crumb truncates, the collapse to the last two crumbs and
+    an ellipsis on narrow viewports, the loading skeleton on the current
+    crumb, and the hover-revealed deeplink copy button.
+
   * Select. Its size scale, trigger and popup dimensions, the option
     and group-label styling, and the required / optional label
     convention.
