@@ -33,7 +33,7 @@ export async function add(names, options = {}) {
   const cwd = options.cwd ?? process.cwd();
 
   if (names.length === 0) {
-    const available = await listComponents();
+    const available = (await listComponents()).filter((c) => !c.internal);
     log();
     log(`  ${bold("Usage:")} npx kumo-vue add <component>`);
     log();
@@ -101,8 +101,15 @@ export async function add(names, options = {}) {
     log(`      ${cyan(installCommand(manager, dependencies))}`);
   }
 
-  const [first] = components;
-  if (first && written.length) {
+  /*
+   * Show the usage line for what was actually asked for, not for whatever
+   * came first out of dependency resolution - that is usually an internal
+   * helper, which has no export to import.
+   */
+  const first = components.find(
+    (component) => names.includes(component.name) && !component.internal,
+  );
+  if (first?.export && written.length) {
     log();
     step("Use it:");
     log(

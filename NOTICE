@@ -44,6 +44,10 @@ In packages/ui - component design, behaviour and appearance:
   * Banner. Its variant and size vocabulary, its dimensions, and the
     structured title / description / action layout.
 
+  * Select. Its size scale, trigger and popup dimensions, the option
+    and group-label styling, and the required / optional label
+    convention.
+
   * Button. Its variant, size and shape vocabulary (`primary`,
     `secondary`, `ghost`, `destructive`, `secondary-destructive`,
     `outline`; `xs` / `sm` / `base` / `lg`; `base` / `square` / `circle`),

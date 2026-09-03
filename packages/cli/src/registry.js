@@ -23,7 +23,9 @@ export async function getComponent(name) {
   try {
     return JSON.parse(await readFile(join(REGISTRY_DIR, `${name}.json`), "utf8"));
   } catch {
-    const available = (await listComponents()).map((c) => c.name);
+    const available = (await listComponents())
+      .filter((component) => !component.internal)
+      .map((component) => component.name);
     throw new Error(
       `Unknown component "${name}".\n  Available: ${available.join(", ")}`,
     );

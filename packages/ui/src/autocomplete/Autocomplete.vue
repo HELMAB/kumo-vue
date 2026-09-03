@@ -32,7 +32,7 @@ import {
   ComboboxViewport,
 } from "reka-ui";
 
-import { toGroups } from "./items.js";
+import { toGroups } from "../shared/items.js";
 
 defineOptions({ inheritAttrs: false });
 
@@ -301,8 +301,8 @@ const rootClasses = computed(() => [
   border-radius: var(--kv-radius-lg);
   box-shadow:
     0 0 0 1px var(--kv-line),
-    0 10px 15px -3px var(--kv-shadow-drop),
-    0 4px 6px -4px var(--kv-shadow-drop);
+    0 10px 15px -3px var(--kv-shadow-elevated),
+    0 4px 6px -4px var(--kv-shadow-elevated);
   font-family: var(--kv-font-sans);
 }
 

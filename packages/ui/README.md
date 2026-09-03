@@ -24,6 +24,7 @@ npx kumo-vue@latest add button
 | `Badge` | Available |
 | `Banner` | Available |
 | `Button` | Available |
+| `Select` | Available |
 
 ## Autocomplete
 
@@ -135,6 +136,13 @@ adds `role="status"` / `aria-live="polite"`, or `role="alert"` /
 `aria-live="assertive"` for the error variant. It is off by default so a banner
 rendered with the page does not announce itself out of context.
 
+**Select options carry no focus ring.** Kumo's option has a `focus-visible`
+ring, which upstream almost never appears: Base UI leaves focus on the popup
+and points at the active option with `aria-activedescendant`. Reka moves real
+DOM focus onto the option, so the same rule would draw a ring on every mouse
+click — something Kumo never shows. The `data-highlighted` tint is the
+affordance in both.
+
 **Autocomplete is one component, not a compound.** Kumo exposes
 `Autocomplete.InputGroup`, `.Content`, `.List`, `.Item`, `.Group`,
 `.GroupLabel` and `.Separator`, assembled with a render prop. That is a React
@@ -143,13 +151,57 @@ keeps the copied component to three readable files instead of eight. Every
 example in Kumo's docs — basic, controlled, field, error, grouped, sizes,
 filtering — has a direct equivalent here.
 
-**Autocomplete has no `Field` wrapper.** Kumo composes a separate `Field`
+**Select is one component too**, for the same reason, replacing
+`Select.Option`, `.Group`, `.GroupLabel` and `.Separator`.
+
+**Neither Select nor Autocomplete has a `Field` wrapper.** Kumo composes a separate `Field`
 component for the label, description and error. Those are props here, wired to
 `aria-describedby` and `aria-invalid` directly.
 
 **No `Banner.Action` compound.** Kumo ships an accent-aware CTA that reads the
 banner variant through React context. Here the `action` slot takes any element,
 so a `Button` goes straight in.
+
+## Select
+
+Choose one option, or several, from a fixed list. The value is constrained to
+the list — that is the distinction from Autocomplete.
+
+```vue
+<Select v-model="fruit" :items="fruits" label="Fruit" placeholder="Choose…" />
+
+<Select v-model="regions" :items="grouped" multiple placeholder="Any region">
+  <template #item="{ item }">{{ item.label }}</template>
+</Select>
+```
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `modelValue` | any, or an array when `multiple` | — |
+| `items` | `string[]` · `{ label, value, disabled }[]` · `{ label, items }[]` | `[]` |
+| `size` | `xs` `sm` `base` `lg` | `base` |
+| `placeholder` | `string` | `""` |
+| `multiple` | `boolean` | `false` |
+| `loading` | `boolean` | `false` |
+| `label` `description` `error` | `string` | `""` |
+| `required` | `true` · `false` · unset | unset |
+| `disabled` | `boolean` | `false` |
+| `open` | `boolean` | — |
+
+Slots: `item` (scoped), `value` (scoped, to render the trigger's contents
+yourself). Emits `update:modelValue` and `update:open`.
+
+**`required` is deliberately three-state.** `true` marks the field required,
+`false` labels it "(optional)" as Kumo does, and leaving it unset shows
+neither. That is why it has no default.
+
+**The trigger shows labels, not values.** Reka renders the raw value; a
+`{ label: "Workers", value: "workers" }` item would put `workers` on the
+trigger. Values are resolved back to labels here, and joined with commas for a
+multiple select.
+
+**`loading` shows a shimmer** in place of the value and blocks interaction,
+matching Kumo's skeleton.
 
 ## Button
 

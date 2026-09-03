@@ -12,7 +12,7 @@ import { describe, expect, it } from "vitest";
 import { mount } from "@vue/test-utils";
 
 import Autocomplete from "../src/autocomplete/Autocomplete.vue";
-import { toGroups, toOption } from "../src/autocomplete/items.js";
+import { toGroups, toOption } from "../src/shared/items.js";
 
 const FRUITS = ["Apple", "Banana", "Cherry"];
 

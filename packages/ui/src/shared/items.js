@@ -1,7 +1,8 @@
 /**
- * Item normalisation for Autocomplete.
+ * Item normalisation, shared by every component that takes an `items` prop -
+ * Autocomplete and Select today.
  *
- * Kept out of the component because it is pure: it can be tested directly,
+ * Kept out of the components because it is pure: it can be tested directly,
  * rather than through a popup that has to be opened first, and it is the part
  * you are most likely to want to change - to accept a different item shape
  * from your API, say.

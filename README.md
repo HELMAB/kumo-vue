@@ -43,7 +43,7 @@ Early. Tokens and the first component exist.
 | Package | Status |
 | --- | --- |
 | [`packages/tokens`](packages/tokens) | Design tokens — available on npm as `@kumo-vue/tokens` |
-| [`packages/ui`](packages/ui) | Vue components on Reka UI — `Autocomplete`, `Badge`, `Banner`, `Button` |
+| [`packages/ui`](packages/ui) | Vue components on Reka UI — `Autocomplete`, `Badge`, `Banner`, `Button`, `Select` |
 | [`packages/cli`](packages/cli) | `npx kumo-vue add` — available on npm as `kumo-vue` |
 | `docs/` | Documentation site — not started |
 

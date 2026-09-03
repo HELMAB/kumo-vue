@@ -25,14 +25,26 @@ const OUT = join(HERE, "../registry");
  */
 const COMPONENTS = [
   {
+    /*
+     * Not a component: shared helpers that components pull in through
+     * `registryDependencies`. Hidden from `add` with no arguments, but
+     * installable by name if someone wants just the helpers.
+     */
+    name: "shared",
+    description: "Helpers shared between components.",
+    internal: true,
+    dependencies: [],
+    registryDependencies: [],
+    files: [{ source: "shared/items.js", path: "shared/items.js" }],
+  },
+  {
     name: "autocomplete",
     description: "Free-form text input with a filtered suggestion list.",
     export: "Autocomplete",
     dependencies: ["reka-ui", "@kumo-vue/tokens"],
-    registryDependencies: [],
+    registryDependencies: ["shared"],
     files: [
       { source: "autocomplete/Autocomplete.vue", path: "autocomplete/Autocomplete.vue" },
-      { source: "autocomplete/items.js", path: "autocomplete/items.js" },
       { source: "autocomplete/index.js", path: "autocomplete/index.js" },
     ],
   },
@@ -56,6 +68,17 @@ const COMPONENTS = [
     files: [
       { source: "banner/Banner.vue", path: "banner/Banner.vue" },
       { source: "banner/index.js", path: "banner/index.js" },
+    ],
+  },
+  {
+    name: "select",
+    description: "Choose one option, or several, from a fixed list.",
+    export: "Select",
+    dependencies: ["reka-ui", "@kumo-vue/tokens"],
+    registryDependencies: ["shared"],
+    files: [
+      { source: "select/Select.vue", path: "select/Select.vue" },
+      { source: "select/index.js", path: "select/index.js" },
     ],
   },
   {
@@ -93,6 +116,7 @@ for (const component of COMPONENTS) {
     description: component.description,
     dependencies: component.dependencies,
     registryDependencies: component.registryDependencies,
+    internal: component.internal ?? false,
   });
 
   console.log(`  Built ${component.name} (${files.length} files)`);

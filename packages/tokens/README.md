@@ -105,7 +105,7 @@ liable to be retuned or removed in any release.
 | Interaction | `--kv-fill` `--kv-fill-hover` `--kv-interact` `--kv-brand` `--kv-brand-hover` `--kv-danger-fill` `--kv-focus` |
 | Border | `--kv-line` `--kv-hairline` `--kv-line-strong` |
 | Status | `--kv-info` `--kv-success` `--kv-warning` `--kv-danger`, each with a `-tint` companion |
-| Shadow | `--kv-shadow-edge` `--kv-shadow-drop` |
+| Shadow | `--kv-shadow-edge` `--kv-shadow-drop` `--kv-shadow-elevated` |
 | Badge | `--kv-badge-{red,green,orange,purple,teal,blue,neutral,inverted}` plus `-inverted-text`, `-teal-subtle-text`, `-orange-subtle-text`, `-neutral-subtle-text` |
 
 `--kv-line` and `--kv-hairline` are decorative separators. Anything that
@@ -220,6 +220,11 @@ Two tokens are additions with no Kumo counterpart. `--kv-line-strong` exists
 because none of Kumo's border tokens reach 3:1. `--kv-danger-fill` splits the
 destructive fill from the status red, which Kumo serves with one token, so the
 fill can be retargeted for contrast without moving the status colour with it.
+
+`--kv-shadow-drop` and `--kv-shadow-elevated` split what Kumo gets from
+Tailwind's `shadow-xs` and `shadow-lg` — 5% and 10% black. One token cannot
+serve a resting 1px shadow and a floating popup without one of them being
+wrong.
 
 `--kv-text-brand` and `--kv-brand` also hold different values in both modes:
 brand-as-text sits on a light surface and brand-as-fill carries a white label,

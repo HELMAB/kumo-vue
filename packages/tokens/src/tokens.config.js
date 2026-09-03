@@ -258,9 +258,19 @@ export const color = {
       light: { value: "oklch(0% 0 0 / 0.12)" },
       dark: { value: "oklch(100% 0 0 / 0.1)" },
     },
+    /** The resting 1px shadow under a control. Kumo's `shadow-xs`. */
     "shadow-drop": {
-      light: { value: "oklch(0% 0 0 / 0.08)" },
+      light: { value: "oklch(0% 0 0 / 0.05)" },
       dark: { value: "oklch(0% 0 0 / 0.3)" },
+    },
+    /**
+     * The deeper shadow under something floating above the page - a popup or
+     * a menu. Kumo's `shadow-lg`, which is twice the strength of `shadow-xs`;
+     * one token cannot serve both without one of them being wrong.
+     */
+    "shadow-elevated": {
+      light: { value: "oklch(0% 0 0 / 0.1)" },
+      dark: { value: "oklch(0% 0 0 / 0.5)" },
     },
   },
 };
