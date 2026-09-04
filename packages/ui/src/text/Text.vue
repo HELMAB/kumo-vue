@@ -138,7 +138,7 @@ if (import.meta.env?.DEV) {
   color: var(--kv-text-default);
 }
 
-/* ---- Copy -------------------------------------------------------------- */
+/* Copy */
 
 .kv-text--body {
   color: var(--kv-text-default);
@@ -181,7 +181,7 @@ if (import.meta.env?.DEV) {
 .kv-text--copy.kv-text--size-base { font-size: var(--kv-text-base); }
 .kv-text--copy.kv-text--size-lg { font-size: var(--kv-text-lg); }
 
-/* ---- Headings ---------------------------------------------------------- */
+/* Headings */
 
 /*
  * A heading takes one of two sizes, and ignores the copy scale: `lg` is the
@@ -212,7 +212,7 @@ if (import.meta.env?.DEV) {
 .kv-text--heading2 { font-size: var(--kv-text-2xl); }
 .kv-text--heading3 { font-size: var(--kv-text-lg); }
 
-/* ---- Monospace --------------------------------------------------------- */
+/* Monospace */
 
 /*
  * A monospace face at the same nominal size reads larger than the sans one
@@ -238,7 +238,7 @@ if (import.meta.env?.DEV) {
   font-size: var(--kv-text-base);
 }
 
-/* ---- Truncation -------------------------------------------------------- */
+/* Truncation */
 
 /*
  * `min-inline-size: 0` is what lets this shrink inside a flex or grid parent,

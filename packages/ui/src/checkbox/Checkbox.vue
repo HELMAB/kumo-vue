@@ -197,7 +197,7 @@ if (import.meta.env?.DEV) {
   justify-content: flex-end;
 }
 
-/* ---- The box ----------------------------------------------------------- */
+/* The box */
 
 .kv-checkbox__control {
   position: relative;
@@ -300,7 +300,7 @@ if (import.meta.env?.DEV) {
   block-size: 100%;
 }
 
-/* ---- Label and messages ------------------------------------------------ */
+/* Label and messages */
 
 .kv-checkbox__label {
   color: var(--kv-text-default);

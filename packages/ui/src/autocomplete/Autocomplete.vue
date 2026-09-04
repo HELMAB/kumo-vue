@@ -206,7 +206,7 @@ const rootClasses = computed(() => [
   --kv-field-padding: var(--kv-space-4);
 }
 
-/* ---- Field furniture --------------------------------------------------- */
+/* Field furniture */
 
 .kv-autocomplete__label {
   font-size: var(--kv-text-sm);
@@ -235,7 +235,7 @@ const rootClasses = computed(() => [
   color: var(--kv-text-danger);
 }
 
-/* ---- Input ------------------------------------------------------------- */
+/* Input */
 
 .kv-autocomplete__input {
   inline-size: 100%;
@@ -283,7 +283,7 @@ const rootClasses = computed(() => [
   }
 }
 
-/* ---- Popup ------------------------------------------------------------- */
+/* Popup */
 
 .kv-autocomplete__popup {
   z-index: 50;
@@ -340,7 +340,7 @@ const rootClasses = computed(() => [
   background-color: var(--kv-line);
 }
 
-/* ---- Item -------------------------------------------------------------- */
+/* Item */
 
 .kv-autocomplete__item {
   display: grid;

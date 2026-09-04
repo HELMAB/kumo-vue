@@ -155,7 +155,7 @@ export function useTabsScroll(getElement, watchKey) {
     connect();
   });
 
-  /* ---- Drag to scroll -------------------------------------------------- */
+  /* Drag to scroll */
 
   /*
    * Mouse only. Touch and trackpad already scroll the list natively, with

@@ -179,7 +179,7 @@ describe("disabled and required", () => {
   });
 });
 
-/* ---- Group ------------------------------------------------------------- */
+/* Group */
 
 const OPTIONS = [
   { label: "Email notifications", value: "email" },

@@ -123,7 +123,7 @@ a:hover .kv-badge {
   block-size: 100%;
 }
 
-/* ---- Semantic variants ------------------------------------------------- */
+/* Semantic variants */
 
 .kv-badge--primary,
 .kv-badge--inverted {
@@ -172,7 +172,7 @@ a:hover .kv-badge {
   padding-inline: calc(var(--kv-space-2) - 1px);
 }
 
-/* ---- Palette variants -------------------------------------------------- */
+/* Palette variants */
 
 .kv-badge--red,
 .kv-badge--green,
@@ -206,7 +206,7 @@ a:hover .kv-badge {
   color: var(--kv-badge-teal-subtle-text);
 }
 
-/* ---- Dot appearance ---------------------------------------------------- */
+/* Dot appearance */
 
 .kv-badge--dot {
   gap: var(--kv-space-1-5);

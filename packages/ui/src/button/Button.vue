@@ -247,7 +247,7 @@ if (import.meta.env?.DEV) {
   }
 }
 
-/* ---- Sizes ------------------------------------------------------------- */
+/* Sizes */
 
 .kv-button--size-xs {
   --kv-button-height: 1.25rem;
@@ -271,7 +271,7 @@ if (import.meta.env?.DEV) {
   --kv-button-gap: var(--kv-space-2);
 }
 
-/* ---- Shapes ------------------------------------------------------------ */
+/* Shapes */
 
 .kv-button--shape-square,
 .kv-button--shape-circle {
@@ -283,7 +283,7 @@ if (import.meta.env?.DEV) {
   --kv-button-radius: var(--kv-radius-full);
 }
 
-/* ---- Variants ---------------------------------------------------------- */
+/* Variants */
 
 .kv-button--secondary,
 .kv-button--secondary-destructive,
@@ -391,7 +391,7 @@ if (import.meta.env?.DEV) {
   }
 }
 
-/* ---- Icon and spinner -------------------------------------------------- */
+/* Icon and spinner */
 
 .kv-button__icon,
 .kv-button__spinner {

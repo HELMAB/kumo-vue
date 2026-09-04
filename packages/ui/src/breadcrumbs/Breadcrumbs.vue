@@ -102,7 +102,7 @@ const isLink = (crumb) => Boolean(crumb.href) && !crumb.current;
 const linkProps = (crumb) =>
   props.linkAs === "a" ? { href: crumb.href } : { to: crumb.href };
 
-/* ---- Clipboard --------------------------------------------------------- */
+/* Clipboard */
 
 const isCopied = ref(false);
 let resetTimer;
@@ -371,7 +371,7 @@ a.kv-breadcrumbs__item:focus-visible {
   color: var(--kv-text-subtle);
 }
 
-/* ---- Loading ----------------------------------------------------------- */
+/* Loading */
 
 .kv-breadcrumbs__skeleton {
   inline-size: 7.8125rem;
@@ -398,7 +398,7 @@ a.kv-breadcrumbs__item:focus-visible {
   }
 }
 
-/* ---- Clipboard --------------------------------------------------------- */
+/* Clipboard */
 
 /*
  * Kumo reveals the copy button on hover alone, which leaves it invisible to
@@ -429,7 +429,7 @@ a.kv-breadcrumbs__item:focus-visible {
   }
 }
 
-/* ---- Narrow viewports -------------------------------------------------- */
+/* Narrow viewports */
 
 /*
  * Below Kumo's `sm` breakpoint only the parent and the current page survive,

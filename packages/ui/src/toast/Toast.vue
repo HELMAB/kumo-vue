@@ -396,7 +396,7 @@ watch(
   }
 }
 
-/* ---- Surface ----------------------------------------------------------- */
+/* Surface */
 
 /*
  * The tint is a layer rather than the background itself, so the surface stays
@@ -454,7 +454,7 @@ watch(
     0 4px 6px -4px var(--kv-shadow-elevated);
 }
 
-/* ---- Content ----------------------------------------------------------- */
+/* Content */
 
 .kv-toast__content {
   position: relative;

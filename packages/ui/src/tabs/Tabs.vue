@@ -240,7 +240,7 @@ const tabProps = (option) => {
   --kv-tabs-control-size: 2rem;
 }
 
-/* ---- The list ---------------------------------------------------------- */
+/* The list */
 
 .kv-tabs__list {
   position: relative;
@@ -268,7 +268,7 @@ const tabProps = (option) => {
   cursor: grabbing;
 }
 
-/* ---- A tab ------------------------------------------------------------- */
+/* A tab */
 
 .kv-tabs__tab {
   position: relative;
@@ -324,7 +324,7 @@ const tabProps = (option) => {
   }
 }
 
-/* ---- The indicator ----------------------------------------------------- */
+/* The indicator */
 
 /*
  * Reka measures the active tab and hands over its width, height and offset;
@@ -351,7 +351,7 @@ const tabProps = (option) => {
   }
 }
 
-/* ---- Segmented --------------------------------------------------------- */
+/* Segmented */
 
 .kv-tabs--segmented {
   --kv-tabs-fade: var(--kv-surface-recessed);
@@ -379,7 +379,7 @@ const tabProps = (option) => {
     0 1px 2px 0 var(--kv-shadow-drop);
 }
 
-/* ---- Underline --------------------------------------------------------- */
+/* Underline */
 
 .kv-tabs--underline {
   --kv-tabs-fade: var(--kv-surface-base);
@@ -415,7 +415,7 @@ const tabProps = (option) => {
   background-color: var(--kv-brand);
 }
 
-/* ---- Scroll controls --------------------------------------------------- */
+/* Scroll controls */
 
 /*
  * A gradient rather than a solid button, so the tab underneath fades out

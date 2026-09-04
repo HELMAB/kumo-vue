@@ -190,7 +190,7 @@ const liveAttrs = computed(() => {
   gap: var(--kv-space-2);
 }
 
-/* ---- Variants ---------------------------------------------------------- */
+/* Variants */
 
 .kv-banner--default {
   background-color: var(--kv-info-tint);

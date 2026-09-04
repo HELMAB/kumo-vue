@@ -236,7 +236,7 @@ const rootClasses = computed(() => [
   --kv-field-icon: 1.125rem;
 }
 
-/* ---- Field furniture --------------------------------------------------- */
+/* Field furniture */
 
 .kv-select__label {
   font-size: var(--kv-text-sm);
@@ -271,7 +271,7 @@ const rootClasses = computed(() => [
   color: var(--kv-text-danger);
 }
 
-/* ---- Trigger ----------------------------------------------------------- */
+/* Trigger */
 
 /*
  * Kumo builds the trigger from its Button styles, then swaps the background
@@ -383,7 +383,7 @@ const rootClasses = computed(() => [
   }
 }
 
-/* ---- Popup ------------------------------------------------------------- */
+/* Popup */
 
 .kv-select__popup {
   z-index: 50;
@@ -433,7 +433,7 @@ const rootClasses = computed(() => [
   background-color: var(--kv-hairline);
 }
 
-/* ---- Option ------------------------------------------------------------ */
+/* Option */
 
 .kv-select__option {
   display: flex;
