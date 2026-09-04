@@ -180,7 +180,11 @@ export const color = {
     recessed: { light: { ref: "neutral.125" }, dark: { ref: "neutral.950" } },
     tint: { light: { ref: "neutral.100" }, dark: { ref: "neutral.800" } },
     contrast: { light: { ref: "neutral.975" }, dark: { ref: "neutral.25" } },
-    overlay: { light: { ref: "neutral.50" }, dark: { ref: "neutral.800" } },
+    /*
+     * Kumo's own neutral-50, which is 98.75% - not Tailwind's, which is 98.5%
+     * and sits at `neutral.50` here. `canvas` reads the same stop upstream.
+     */
+    overlay: { light: { ref: "neutral.25" }, dark: { ref: "neutral.800" } },
     control: { light: { ref: "neutral.0" }, dark: { ref: "neutral.900" } },
   },
   interact: {

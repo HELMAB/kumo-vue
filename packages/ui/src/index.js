@@ -5,6 +5,7 @@ export { Breadcrumbs } from "./breadcrumbs/index.js";
 export { Button } from "./button/index.js";
 export { Checkbox, CheckboxGroup } from "./checkbox/index.js";
 export { Dialog } from "./dialog/index.js";
+export { Dropdown } from "./dropdown/index.js";
 export { Select } from "./select/index.js";
 export { Tabs } from "./tabs/index.js";
 export { Text } from "./text/index.js";

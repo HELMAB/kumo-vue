@@ -27,6 +27,7 @@ npx kumo-vue@latest add button
 | `Button` | Available |
 | `Checkbox` · `CheckboxGroup` | Available |
 | `Dialog` | Available |
+| `Dropdown` | Available |
 | `Tabs` | Available |
 | `Text` | Available |
 | `Toaster` · `toast` | Available |
@@ -437,6 +438,83 @@ drops the attribute instead of referencing an element that does not exist.
 
 **Motion is dropped under `prefers-reduced-motion`** — both the backdrop fade
 and the panel's scale-in.
+
+## Dropdown
+
+A menu of actions anchored to a trigger.
+
+```vue
+<Dropdown :items="['Worker', 'Pages', 'KV Namespace']" @select="create">
+  <template #trigger><Button>Add</Button></template>
+</Dropdown>
+
+<Dropdown v-model="prefs" :items="items" align="start">
+  <template #trigger><Button>Account</Button></template>
+</Dropdown>
+```
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `items` | `MenuEntry[]` | `[]` |
+| `modelValue` | `Record<string, unknown>` | — |
+| `open` | `boolean` | — |
+| `defaultOpen` | `boolean` | `false` |
+| `side` | `top` `right` `bottom` `left` | `bottom` |
+| `align` | `start` `center` `end` | `center` |
+| `sideOffset` | `number` | `8` |
+| `modal` | `boolean` | `true` |
+| `loop` | `boolean` | `false` |
+| `dir` | `ltr` · `rtl` · unset | unset |
+| `to` | `string \| object` | `"body"` |
+
+Slots: `trigger`, and `item` — scoped, receiving the normalised `entry` and the
+original `item`. Emits `select` (the entry and the DOM event), plus
+`update:modelValue` and `update:open`.
+
+**The menu is the `items` prop.** Kumo composes thirteen components —
+`DropdownMenu.Item`, `.LinkItem`, `.CheckboxItem`, `.RadioGroup`, `.RadioItem`,
+`.Sub`, `.SubTrigger`, `.Separator`, `.Label`, `.Group` and the rest. Here an
+entry's shape says which of those it is, the same flattening Select makes with
+its groups:
+
+| Entry | Renders as |
+| --- | --- |
+| `"Rename"` | an action item |
+| `{ label, icon, shortcut, variant, selected, inset, disabled }` | an action item |
+| `{ label, href, target }` | a link item — a real `<a>` |
+| `{ label, items }` | a submenu |
+| `{ type: "group", label, items }` | a labelled group, not a submenu |
+| `{ type: "label", label }` | a heading |
+| `{ type: "separator" }` | a rule |
+| `{ type: "checkbox", label, value, checked }` | a checkbox item |
+| `{ type: "radio", value, selected, items }` | a radio group |
+
+`type` always wins, which is what separates a group from a submenu: both are
+`{ label, items }`, and a menu reads that as something you open unless told
+otherwise. `divider`, `heading` and `action` are accepted as spellings of
+`separator`, `label` and `item`.
+
+**One `v-model` for every toggle.** A checkbox's state and a radio group's
+choice are held in one object keyed by the entry's `value` — so a menu with
+three checkboxes and two radio groups still needs one binding, where Kumo wires
+a `useState` and an `onCheckedChange` per item. The items seed it, so leaving
+`v-model` off works too and the menu keeps its own.
+
+**Closing follows Kumo's defaults.** An action closes the menu, a checkbox or a
+radio item leaves it open, and `closeOnClick` on the entry overrides either.
+
+**`inset` aligns a label with the entries that have icons**, so a menu mixing
+the two reads as one column. Kumo's own guidance, and the same class.
+
+Built on **Reka UI's DropdownMenu primitive**, the counterpart to the Base UI
+one Kumo uses. Reka owns the portal, the positioning, typeahead, arrow-key
+navigation into and out of submenus, and the `role="menu"` /
+`role="menuitem"` / `aria-checked` contract.
+
+**Icons are components, not a slot.** `icon` on an entry takes a Vue component
+and is rendered with `<component :is>` — icons vary per entry, so a single slot
+would have to branch on the label. It is the closest thing to Kumo passing
+`icon={TrashIcon}`.
 
 ## Tabs
 

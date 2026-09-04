@@ -107,6 +107,19 @@ const COMPONENTS = [
     ],
   },
   {
+    name: "dropdown",
+    description: "Menu of actions anchored to a trigger, with submenus, toggles and links.",
+    export: "Dropdown",
+    dependencies: ["reka-ui", "@kumo-vue/tokens"],
+    registryDependencies: [],
+    files: [
+      { source: "dropdown/Dropdown.vue", path: "dropdown/Dropdown.vue" },
+      { source: "dropdown/DropdownItems.vue", path: "dropdown/DropdownItems.vue" },
+      { source: "dropdown/items.js", path: "dropdown/items.js" },
+      { source: "dropdown/index.js", path: "dropdown/index.js" },
+    ],
+  },
+  {
     name: "select",
     description: "Choose one option, or several, from a fixed list.",
     export: "Select",

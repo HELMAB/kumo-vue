@@ -145,6 +145,21 @@ for (const mode of ["light", "dark"]) {
     ),
     min: 4.5,
   });
+
+  /*
+   * Dropdown: a danger item under the cursor, where a 5% danger wash sits over
+   * the menu's own surface. The wash is mixed at render time, so this pairing
+   * exists nowhere the token audit can reach it.
+   */
+  results.push({
+    label: `dropdown danger ${mode} - text on highlight`,
+    ratio: contrastRatio(
+      color.textDanger[mode],
+      alpha(color.danger[mode], 0.05),
+      color.surfaceControl[mode],
+    ),
+    min: 4.5,
+  });
 }
 
 const width = Math.max(...results.map((r) => r.label.length));

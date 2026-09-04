@@ -61,3 +61,23 @@ if (!globalThis.PointerEvent) {
     }
   };
 }
+
+/*
+ * `:popover-open`, `:modal` and `:fullscreen` send jsdom's selector engine into
+ * infinite recursion: its `:modal` test asks whether the element is fullscreen,
+ * and that asks the element to match all over again. Nothing here ever enters
+ * the top layer, so the honest answer is always `false`.
+ *
+ * Floating UI asks this of every popup it positions - it is how it decides
+ * whether to measure against the viewport or the offset parent - so without
+ * this, opening any popup built on it spins forever rather than failing.
+ */
+{
+  const TOP_LAYER = /:(popover-open|modal|fullscreen)\b/;
+  const matches = Element.prototype.matches;
+
+  Element.prototype.matches = function (selector) {
+    if (TOP_LAYER.test(selector)) return false;
+    return matches.call(this, selector);
+  };
+}
