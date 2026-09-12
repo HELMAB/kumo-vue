@@ -71,6 +71,15 @@ In packages/ui - component design, behaviour and appearance:
     option to keep a closed panel mounted so what is inside it survives,
     and the choice not to ship an accordion separately from it.
 
+  * CommandPalette. The overlay itself - a search row over a scrolling
+    list of commands, a tenth of the way down the viewport and capped at
+    three fifths of it - the grouped and rich row layouts, with an icon,
+    a breadcrumb trail, a description and a marker for an external
+    destination, the arrow that appears on the row you are on, the
+    marking of matched text, the empty and loading states, the footer
+    reserved for keyboard hints, and the keyboard contract: arrows move,
+    Enter runs, and Ctrl or Cmd held with Enter runs in a new tab.
+
   * Dialog. Its two ARIA roles and when each applies, the four widths
     (288 / 384 / 512 / 768px) and the rule that content wider than the
     dialog scrolls inside it rather than stretching it, the option to

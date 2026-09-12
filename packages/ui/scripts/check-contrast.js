@@ -147,6 +147,21 @@ for (const mode of ["light", "dark"]) {
   });
 
   /*
+   * CommandPalette: the mark around a search match, which is the warning
+   * colour at half strength over the list surface. Mixed at render time, so
+   * the token audit cannot see the pair either.
+   */
+  results.push({
+    label: `command palette ${mode} - text on match mark`,
+    ratio: contrastRatio(
+      color.textDefault[mode],
+      alpha(color.warning[mode], 0.5),
+      color.surfaceBase[mode],
+    ),
+    min: 4.5,
+  });
+
+  /*
    * Dropdown: a danger item under the cursor, where a 5% danger wash sits over
    * the menu's own surface. The wash is mixed at render time, so this pairing
    * exists nowhere the token audit can reach it.

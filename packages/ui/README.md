@@ -28,6 +28,7 @@ npx kumo-vue@latest add button
 | `Checkbox` · `CheckboxGroup` | Available |
 | `ClipboardText` | Available |
 | `Collapsible` | Available |
+| `CommandPalette` | Available |
 | `Dialog` | Available |
 | `Dropdown` | Available |
 | `Tabs` | Available |
@@ -519,6 +520,164 @@ back once and bound, so it is either right or absent, never empty.
 
 **Motion is dropped under `prefers-reduced-motion`** — the panel's height and
 the caret's turn. Kumo animates regardless.
+
+## CommandPalette
+
+The ⌘K overlay: a search field over a list of commands.
+
+```vue
+<CommandPalette v-model:open="open" :items="commands" @select="run" />
+```
+
+```js
+const commands = [
+  { label: "Actions", items: [
+    { label: "Create Worker", icon: PlusIcon },
+    { label: "Deploy", icon: RocketIcon, description: "Ship the current build" },
+  ]},
+  { label: "Navigate", items: [
+    { label: "Billing", breadcrumbs: ["Account", "Settings"] },
+    { label: "Developer docs", external: true },
+  ]},
+]
+
+function run(command, { newTab }) {
+  newTab ? window.open(command.value) : go(command.value)
+}
+```
+
+Results you fetch yourself — filter off, spinner on, and your own match ranges:
+
+```vue
+<CommandPalette v-model:open="open" v-model:search="query"
+                :items="results" :loading="pending" ignore-filter>
+  <template #footer>
+    <span><kbd class="kv-command-palette__key">↑↓</kbd> Navigate</span>
+    <span><kbd class="kv-command-palette__key">⌘↵</kbd> Open in new tab</span>
+  </template>
+</CommandPalette>
+```
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `open` | `boolean` | — |
+| `defaultOpen` | `boolean` | `false` |
+| `items` | `Command[]` · `{ label, items }[]` | `[]` |
+| `search` | `string` | — |
+| `placeholder` | `string` | `"Type a command or search…"` |
+| `emptyMessage` | `string` | `"No results found"` |
+| `loading` | `boolean` | `false` |
+| `ignoreFilter` | `boolean` | `false` |
+| `closeOnSelect` | `boolean` | `true` |
+| `arrows` | `boolean` | `false` |
+| `label` | `string` | `"Command palette"` |
+| `dir` | `ltr` · `rtl` · unset | unset |
+| `to` | `string \| object` | `"body"` |
+
+Slots: `item` (scoped, receiving the normalised `command` and the original
+`item`), `empty`, `loading`, `footer`, and `leading` / `trailing` for the ends
+of the search row. Emits `select` (the command and `{ newTab }`), `highlight`,
+`update:open` and `update:search`.
+
+A command is a string, or an object:
+
+| Field | Renders as |
+| --- | --- |
+| `label` — or Kumo's `title` | the row's text |
+| `value` | what `select` carries; defaults to the label |
+| `icon` | a component, at the start of the row |
+| `breadcrumbs` | a `Account › Settings ›` trail before the label |
+| `description` | dimmed, after an em dash |
+| `external` | an external-link marker instead of the arrow |
+| `disabled` | dimmed and unselectable |
+| `highlights` · `breadcrumbHighlights` | `[start, end]` ranges to mark, for when you matched |
+| `arrow` | overrides `arrows` for this row |
+
+**Keyboard.** `↑` `↓` move, `Enter` runs the highlighted command,
+`⌘`/`Ctrl`+`Enter` runs it with `{ newTab: true }`, `Escape` closes. Focus
+stays in the search field the whole time — Reka points at the row with
+`aria-activedescendant` — so you can keep typing while you walk the list.
+
+**Fifteen components become one.** Kumo composes `Root`, `Dialog`, `Panel`,
+`Input`, `List`, `Results`, `Group`, `GroupLabel`, `Items`, `Item`,
+`ResultItem`, `HighlightedText`, `Empty`, `Loading` and `Footer`, wired
+together with two render props. Here the palette is the `items` prop and a few
+slots, the same flattening Dropdown and Select make. `ResultItem` and `Item`
+are the same row: giving a command `breadcrumbs` or an `icon` is what makes it
+the rich one.
+
+**It filters.** Kumo's filter defaults to `() => true`, so every consumer
+writes one; its own demos import a `filterGroupsWithItems` helper to fill the
+gap. Here a case-insensitive substring match is built in, over the label, the
+breadcrumbs and the description together — so "billing" finds
+*Account › Settings › Billing*. `ignoreFilter` hands the job back for a fuzzy
+match or a server query, and `items` is then rendered exactly as given.
+
+**It marks what matched**, without being told where. Kumo's `HighlightedText`
+needs `titleHighlights` computed by the consumer; here the ranges come from the
+same substring test the filter just ran. Supply `highlights` on a command and
+those win, which is the hook for a fuzzy or server-side match — Kumo's only
+mode.
+
+**Selection is running something, not choosing it.** A palette has no selected
+value to keep, so Reka's own selection is stepped over: `select` fires and the
+palette closes. `closeOnSelect` keeps it open for a command you would run twice
+— and `@select` is one handler for the mouse, `Enter`, and `⌘`/`Ctrl` held over
+either.
+
+**Closing clears the search.** A palette that reopens still showing the last
+query is one you have to clear before you can use it. Kumo's examples do this by
+hand on every select; here it happens however the palette was closed, including
+a page setting `open` to false itself.
+
+**There are no default keyboard hints.** The footer renders only when you give
+it something, because hints are words and words are yours to translate — Kumo's
+reasoning, and this library's. What is provided is the key cap:
+`class="kv-command-palette__key"` styles a `<kbd>` to match, so writing them
+does not mean reinventing them.
+
+**No `Dialog` + `Panel` split.** Upstream separates the two so content can be
+swapped inside a palette that stays open — a drill-down into a zone picker,
+say. That is the one thing this flattening gives up. A second `CommandPalette`
+bound to the same `open` gets close, and a real drill-down is `items` swapped
+under a `search` you control.
+
+**The panel is a tenth of the way down, and caps at 60% of the viewport** — both
+Kumo's. The horizontal centring is `inset-inline` plus `margin-inline: auto`
+rather than Kumo's `left-1/2 -translate-x-1/2`, which is physical and would
+drag the panel a whole width off-centre in RTL; the height cap is `dvh` rather
+than `vh`, so a phone's address bar cannot cut the list off.
+
+**Arrows are off by default.** Kumo's basic `Item` carries no arrow at the end
+of the highlighted row and its `ResultItem` does; `arrows` is that choice made
+once for the palette, and a command's own `arrow` overrides it. An external
+link never gets one — it has its own marker instead.
+
+**The chrome is measured against upstream, not guessed at.** The panel's
+hairline and 1px drop, the 2px brand ring the search row takes while focused —
+outset, so the panel clips it to the line beneath — the hairline over the
+results, the row's 6px/8px padding and 8px radius, and the group heading at
+12px semibold: all read off Kumo's own rendered palette.
+
+**`aria-controls` points at the list.** Reka gives the list its id when the
+list first renders, which is after the search field — leaving an empty IDREF
+that nothing corrects. The id is read back once and bound, so it is either
+right or absent, never empty.
+
+**The writing direction reaches the contents, not just the panel.** Reka's
+combobox writes a direction of its own onto the element it renders inside the
+panel — `ltr` unless it is told otherwise — which would leave an RTL palette
+with a left-to-right list inside a right-to-left frame. Both are set.
+
+**The scrim is the Dialog's, not the name Kumo gives it.** Upstream reaches for
+`bg-kumo-overlay` here; `overlay` in this port's token vocabulary is the wash
+under a highlighted row — Dropdown's — and at 80% over a light page that is no
+scrim at all. The recessed surface is what a scrim means here, so the palette
+and the dialog dim the page identically.
+
+**Motion is dropped under `prefers-reduced-motion`** — the backdrop, the
+panel's scale-in, the row highlight and the arrow. The spinner slows rather
+than stopping, as Button's does.
 
 ## Dialog
 

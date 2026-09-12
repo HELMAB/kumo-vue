@@ -118,6 +118,18 @@ const COMPONENTS = [
     ],
   },
   {
+    name: "command-palette",
+    description: "The ⌘K overlay: a search field over a list of commands.",
+    export: "CommandPalette",
+    dependencies: ["reka-ui", "@kumo-vue/tokens"],
+    registryDependencies: ["shared"],
+    files: [
+      { source: "command-palette/CommandPalette.vue", path: "command-palette/CommandPalette.vue" },
+      { source: "command-palette/items.js", path: "command-palette/items.js" },
+      { source: "command-palette/index.js", path: "command-palette/index.js" },
+    ],
+  },
+  {
     name: "dialog",
     description: "Modal window over the page, with everything behind it inert.",
     export: "Dialog",
