@@ -13,10 +13,12 @@
     "test": "vitest run"
   },
   "peerDependencies": {
+    "@internationalized/date": "^3.5.0",
     "reka-ui": "^2.0.0",
     "vue": "^3.4.0"
   },
   "devDependencies": {
+    "@internationalized/date": "^3.5.0",
     "@vitejs/plugin-vue": "^5.1.0",
     "@vue/test-utils": "^2.4.6",
     "jsdom": "^25.0.0",

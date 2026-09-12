@@ -7,6 +7,7 @@ export { Checkbox, CheckboxGroup } from "./checkbox/index.js";
 export { ClipboardText } from "./clipboard-text/index.js";
 export { Collapsible } from "./collapsible/index.js";
 export { CommandPalette } from "./command-palette/index.js";
+export { DatePicker } from "./date-picker/index.js";
 export { Dialog } from "./dialog/index.js";
 export { Dropdown } from "./dropdown/index.js";
 export { Select } from "./select/index.js";

@@ -29,6 +29,7 @@ npx kumo-vue@latest add button
 | `ClipboardText` | Available |
 | `Collapsible` | Available |
 | `CommandPalette` | Available |
+| `DatePicker` | Available |
 | `Dialog` | Available |
 | `Dropdown` | Available |
 | `Tabs` | Available |
@@ -678,6 +679,119 @@ and the dialog dim the page identically.
 **Motion is dropped under `prefers-reduced-motion`** — the backdrop, the
 panel's scale-in, the row highlight and the arrow. The spinner slows rather
 than stopping, as Button's does.
+
+## DatePicker
+
+A calendar, for one date, several, or a range.
+
+```vue
+<DatePicker v-model="date" />
+<DatePicker v-model="dates" mode="multiple" :max="5" />
+<DatePicker v-model="range" mode="range" :number-of-months="2" />
+```
+
+```vue
+<!-- some days spoken for, and a count underneath -->
+<DatePicker v-model="dates" mode="multiple" :max="5" :disabled="taken" fixed-weeks>
+  <template #footer>
+    <p class="hint">{{ dates?.length ?? 0 }} / 5 days selected.</p>
+  </template>
+</DatePicker>
+```
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `mode` | `single` `multiple` `range` | `single` |
+| `modelValue` | `Date` · `Date[]` · `{ from, to }` | — |
+| `numberOfMonths` | `number` | `1` |
+| `month` | `Date` | — |
+| `disabled` | `boolean` · `Date[]` · `(date) => boolean` | `false` |
+| `minDate` `maxDate` | `Date` | — |
+| `min` `max` | `number` | — |
+| `fixedWeeks` | `boolean` | `false` |
+| `showOutsideDays` | `boolean` | `true` |
+| `weekStartsOn` | `0`–`6` | locale's |
+| `weekdayFormat` | `narrow` `short` `long` | `short` |
+| `locale` | BCP-47 tag | the page's |
+| `readonly` | `boolean` | `false` |
+| `label` `previousLabel` `nextLabel` | `string` | `"Calendar"` · `"Previous month"` · `"Next month"` |
+| `dir` | `ltr` · `rtl` · unset | inherited |
+
+Slots: `footer`, `day` (scoped, receiving the `Date` and the day number) and
+`caption` (scoped, receiving the month's `Date` and its formatted `label`).
+Emits `update:modelValue` and `update:month`, so `v-model` and `v-model:month`
+both work.
+
+**The model is plain `Date` objects.** That is Kumo's API, because
+react-day-picker's is. Underneath, the calendar works in
+`@internationalized/date` values — which is what gives it calendar systems
+other than the Gregorian one, and month arithmetic that does not drift — and
+`dates.js` translates. A page never imports it.
+
+The translation goes through the year, month and day a `Date` reads as
+**locally**, never through an instant. A calendar date is a label on a wall,
+not a point in time; converting through UTC is what hands somebody in Auckland
+yesterday.
+
+**Built on Reka's Calendar and RangeCalendar**, where Kumo wraps
+react-day-picker and styles its class names. There is no react-day-picker for
+Vue, so the markup here is Reka's and the design is Kumo's — measured off
+Kumo's own rendered calendar: 36px cells around 32px days, a 6px day radius,
+13px numerals, the 40px caption band with the arrows pinned to its far corner,
+and the 1rem gap between months.
+
+**`disabled` is Kumo's matcher.** `true` puts the whole calendar out of reach,
+a `Date[]` names days, and a predicate decides. Days are compared as calendar
+days, so a list built from `new Date()` matches whatever time of day it was
+built at.
+
+**`min` and `max` are Kumo's, and half of them are ours.** For `multiple` they
+are a count of days; for `range`, a count of nights. Reka has a maximum for a
+range and nothing else, so the other three are applied here — by putting the
+days that would break them out of reach, which is how react-day-picker does it
+too. A day already chosen stays clickable whatever the count, because clicking
+it is how it is un-chosen.
+
+**A day is a real `<button>`.** Reka's cell trigger is a `div` wearing
+`role="button"`; upstream it is a button, and so is this.
+
+**Weekday headings are `Intl`'s short forms**, so `Sun` where Kumo shows `Su`.
+Kumo gets two letters from date-fns, which ships a curated two-letter form per
+locale; `Intl` has narrow, short and long and nothing between, and truncating
+`short` to two characters is meaningless in most scripts. Pass
+`weekday-format="narrow"` for a tighter grid.
+
+**Columns are a minimum width, not a fixed one.** Kumo's 36px wherever the
+weekday heading fits inside it, and wider where it does not — Arabic's short
+weekday names are whole words that cannot be broken or squeezed, and a wider
+calendar beats headings that collide or get cut off mid-word.
+
+**The selected day is the inverted surface**, and a range is drawn on the
+cells rather than on the days: cells touch and days do not, so only a cell can
+carry a bar that runs unbroken across a week. Kumo makes the same split. The
+fill is `--kv-surface-contrast` against `--kv-text-inverse`, this library's
+inverted pair, where Kumo hardcodes a raw colour for it — in dark mode the two
+land on the same value, and in light mode ours is the darker.
+
+**Selection works uncontrolled too.** Kumo's is controlled only, so a picker
+with nothing bound to it cannot hold a selection at all. Here `modelValue`
+wins when it is given, and the calendar keeps its own when it is not — the
+same arrangement Dropdown and Collapsible make.
+
+**The writing direction is inherited, and has to be taken back.** Reka's
+calendar writes a direction of its own onto the element it renders — `ltr`
+unless told otherwise — so a calendar inside an RTL page would come out the
+wrong way round. It is read from whatever the calendar was written inside and
+handed back.
+
+**There is no popover.** Kumo composes `Popover` + `DatePicker` for a dropdown
+date field, and every one of its examples does it in userland. There is no
+Popover component here yet; `Dialog` gets close, and this will be worth
+revisiting when Popover lands.
+
+**Motion is dropped under `prefers-reduced-motion`** — the day and arrow
+transitions. Kumo animates the month slide as well; Reka does not slide months,
+so there is nothing there to drop.
 
 ## Dialog
 

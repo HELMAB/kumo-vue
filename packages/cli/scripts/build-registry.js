@@ -130,6 +130,24 @@ const COMPONENTS = [
     ],
   },
   {
+    name: "date-picker",
+    description: "Calendar for one date, several, or a range.",
+    export: "DatePicker",
+    /*
+     * The calendar works in `@internationalized/date` values rather than in
+     * `Date`, which is what gives it non-Gregorian calendars and arithmetic
+     * that does not drift. Reka depends on it too, so this is already in the
+     * tree - but the copied component imports it by name, so it is named here.
+     */
+    dependencies: ["reka-ui", "@kumo-vue/tokens", "@internationalized/date"],
+    registryDependencies: [],
+    files: [
+      { source: "date-picker/DatePicker.vue", path: "date-picker/DatePicker.vue" },
+      { source: "date-picker/dates.js", path: "date-picker/dates.js" },
+      { source: "date-picker/index.js", path: "date-picker/index.js" },
+    ],
+  },
+  {
     name: "dialog",
     description: "Modal window over the page, with everything behind it inert.",
     export: "Dialog",

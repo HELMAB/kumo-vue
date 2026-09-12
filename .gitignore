@@ -4,5 +4,6 @@ dist/
 .DS_Store
 .vite/
 demo/
+kumo-ui-docs/
 # Generated from packages/ui by `pnpm --filter kumo-vue build`
 packages/cli/registry/

@@ -80,6 +80,15 @@ In packages/ui - component design, behaviour and appearance:
     reserved for keyboard hints, and the keyboard contract: arrows move,
     Enter runs, and Ctrl or Cmd held with Enter runs in a new tab.
 
+  * DatePicker. Its three selection modes and the `Date`-shaped API they
+    take, the calendar's dimensions - 36px cells around 32px days, a
+    40px caption band with the arrows pinned to its far corner, and a
+    1rem gap between months shown side by side - the treatment of days
+    outside the month, of today, and of the two ends of a range against
+    the bar between them, the limits on how many days or nights may be
+    chosen, and the footer below the grid that takes no part in deciding
+    its width.
+
   * Dialog. Its two ARIA roles and when each applies, the four widths
     (288 / 384 / 512 / 768px) and the rule that content wider than the
     dialog scrolls inside it rather than stretching it, the option to
