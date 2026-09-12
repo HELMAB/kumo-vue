@@ -185,6 +185,63 @@ const COMPONENTS = [
     ],
   },
   {
+    name: "label",
+    description: "Text that names a form control, with optional and tooltip markers.",
+    export: "Label",
+    dependencies: ["reka-ui", "@kumo-vue/tokens"],
+    registryDependencies: ["button"],
+    files: [
+      { source: "label/Label.vue", path: "label/Label.vue" },
+      { source: "label/index.js", path: "label/index.js" },
+    ],
+  },
+  {
+    name: "input",
+    description: "Single-line text field, on its own or in a labelled field.",
+    export: "Input",
+    dependencies: ["@kumo-vue/tokens"],
+    registryDependencies: [],
+    files: [
+      { source: "input/Input.vue", path: "input/Input.vue" },
+      { source: "input/index.js", path: "input/index.js" },
+    ],
+  },
+  {
+    /*
+     * The textarea wears `.kv-input` for everything but its height, so the
+     * Input stylesheet has to be present - which is what this dependency is
+     * for. It is a real dependency rather than duplicated CSS so the two
+     * cannot drift once both are copied into a project.
+     */
+    name: "input-area",
+    description: "Multi-line text field, optionally growing with its content.",
+    export: "InputArea",
+    dependencies: ["@kumo-vue/tokens"],
+    registryDependencies: ["input"],
+    files: [
+      { source: "input-area/InputArea.vue", path: "input-area/InputArea.vue" },
+      { source: "input-area/useAutoResize.js", path: "input-area/useAutoResize.js" },
+      { source: "input-area/index.js", path: "input-area/index.js" },
+    ],
+  },
+  {
+    name: "input-group",
+    description: "Input with icons, addons, an inline suffix or attached buttons.",
+    export: "InputGroup",
+    dependencies: ["@kumo-vue/tokens"],
+    registryDependencies: ["button", "input"],
+    files: [
+      { source: "input-group/InputGroup.vue", path: "input-group/InputGroup.vue" },
+      { source: "input-group/InputGroupAddon.vue", path: "input-group/InputGroupAddon.vue" },
+      { source: "input-group/InputGroupButton.vue", path: "input-group/InputGroupButton.vue" },
+      { source: "input-group/InputGroupInput.vue", path: "input-group/InputGroupInput.vue" },
+      { source: "input-group/InputGroupSuffix.vue", path: "input-group/InputGroupSuffix.vue" },
+      { source: "input-group/context.js", path: "input-group/context.js" },
+      { source: "input-group/zone.js", path: "input-group/zone.js" },
+      { source: "input-group/index.js", path: "input-group/index.js" },
+    ],
+  },
+  {
     name: "select",
     description: "Choose one option, or several, from a fixed list.",
     export: "Select",

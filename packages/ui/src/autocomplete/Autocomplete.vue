@@ -208,11 +208,12 @@ const rootClasses = computed(() => [
 
 /* Field furniture */
 
+/* Kumo's Field label: `text-base font-medium text-kumo-default`. */
 .kv-autocomplete__label {
-  font-size: var(--kv-text-sm);
+  font-size: var(--kv-text-base);
   font-weight: 500;
   line-height: var(--kv-leading-normal);
-  color: var(--kv-text-strong);
+  color: var(--kv-text-default);
 }
 
 .kv-autocomplete__required {
