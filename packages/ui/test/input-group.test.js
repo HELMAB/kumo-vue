@@ -129,11 +129,21 @@ describe("Label", () => {
     expect(wrapper.find("[data-kumo-part=optional]").text()).toBe("(optional)");
   });
 
-  it("carries the tooltip as a title, there being no Tooltip yet", () => {
+  it("puts the tooltip on a focusable button, not a bare icon", () => {
     const wrapper = mount(Label, { props: { text: "Email", tooltip: "For receipts" } });
     const info = wrapper.find("[data-kumo-part=tooltip]");
-    expect(info.attributes("title")).toBe("For receipts");
+    expect(info.exists()).toBe(true);
+    expect(info.element.tagName).toBe("BUTTON");
     expect(info.attributes("aria-label")).toBe("More information");
+    /* A real Tooltip now, so the text is no longer the native `title`: a
+       tooltip that only the OS can draw cannot be styled, positioned or read
+       on a touch device. */
+    expect(info.attributes("title")).toBeUndefined();
+    expect(wrapper.find(".kv-tooltip__trigger").exists()).toBe(true);
+  });
+
+  it("renders no info button without a tooltip", () => {
+    expect(mount(Label, { props: { text: "Email" } }).find("[data-kumo-part=tooltip]").exists()).toBe(false);
   });
 
   it("drops the label element, and its type, in content mode", () => {

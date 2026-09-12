@@ -1,0 +1,191 @@
+/*
+ * The field furniture and the control, shared by every component that wears
+ * Input's look: Input itself, InputArea, TagInput and SensitiveInput.
+ *
+ * A stylesheet rather than a `<style>` block in Input.vue, because the other
+ * three carry `.kv-input` without importing the Input *component* - so the
+ * rules would only reach the page when someone happened to use an Input too.
+ * A file each of them imports cannot be forgotten that way.
+ */
+/* The field */
+
+/*
+ * Kumo's Field is `grid gap-2`. The wrapper is unconditional here so the
+ * input element is written once rather than once per branch; with nothing to
+ * stack it takes itself out of the layout entirely, which leaves a bare
+ * `<Input />` the intrinsic width of an input rather than the full width of
+ * whatever contains it.
+ */
+.kv-input-field {
+  display: grid;
+  gap: var(--kv-space-2);
+  font-family: var(--kv-font-sans);
+}
+
+.kv-input-field--bare {
+  display: contents;
+}
+
+.kv-input-field__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kv-space-1);
+  margin: 0;
+  font-size: var(--kv-text-base);
+  font-weight: 500;
+  line-height: var(--kv-leading-normal);
+  color: var(--kv-text-default);
+  /* A double-click on the label should select the field's value, not the
+     field's name. Kumo's Field sets `select-none` for the same reason. */
+  user-select: none;
+}
+
+.kv-input-field__required {
+  margin-inline-start: 0.125rem;
+  color: var(--kv-text-danger);
+}
+
+.kv-input-field__optional {
+  margin-inline-start: 0.25rem;
+  font-weight: 400;
+  color: var(--kv-text-subtle);
+}
+
+.kv-input-field__info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--kv-radius-sm);
+  background: none;
+  color: var(--kv-text-subtle);
+  cursor: pointer;
+}
+
+.kv-input-field__info:hover {
+  color: var(--kv-text-default);
+}
+
+.kv-input-field__info:focus-visible {
+  outline: 2px solid var(--kv-focus);
+  outline-offset: 1px;
+}
+
+.kv-input-field__info > svg {
+  inline-size: 1rem;
+  block-size: 1rem;
+}
+
+.kv-input-field__description,
+.kv-input-field__error {
+  margin: 0;
+  font-size: var(--kv-text-sm);
+  /* Kumo's `leading-snug`. */
+  line-height: 1.4;
+}
+
+.kv-input-field__description {
+  color: var(--kv-text-subtle);
+}
+
+.kv-input-field__error {
+  color: var(--kv-text-danger);
+}
+
+/* The control */
+
+/*
+ * Kumo draws the outline with Tailwind's `ring`, which is a spread box-shadow
+ * outside the border box rather than a border - so it costs no layout width
+ * and the 1px -> 1.5px change on focus does not move anything. Same here.
+ *
+ * No width: Kumo sets none either. In a field the input is a grid item and
+ * stretches; bare, it keeps an input's intrinsic width. One rule, both
+ * behaviours, which is why the wrapper below disappears rather than shrinks.
+ */
+.kv-input {
+  --kv-input-height: 2.25rem;
+  --kv-input-padding-inline: var(--kv-space-3);
+  --kv-input-radius: var(--kv-radius-lg);
+  --kv-input-font-size: var(--kv-text-base);
+  --kv-input-ring: var(--kv-line);
+  --kv-input-ring-width: 1px;
+
+  box-sizing: border-box;
+  block-size: var(--kv-input-height);
+  min-inline-size: 0;
+
+  padding-inline: var(--kv-input-padding-inline);
+  padding-block: 0;
+  border: 0;
+  border-radius: var(--kv-input-radius);
+
+  background-color: var(--kv-surface-control);
+  color: var(--kv-text-default);
+  box-shadow: 0 0 0 var(--kv-input-ring-width) var(--kv-input-ring);
+
+  font-family: var(--kv-font-sans);
+  font-size: var(--kv-input-font-size);
+  line-height: var(--kv-leading-normal);
+
+  outline: none;
+  transition: box-shadow 150ms ease;
+}
+
+/* Sizes. `base` is set above; these are the other three. */
+
+.kv-input--size-xs {
+  --kv-input-height: 1.25rem;
+  --kv-input-padding-inline: var(--kv-space-1-5);
+  --kv-input-radius: var(--kv-radius-sm);
+  --kv-input-font-size: var(--kv-text-xs);
+}
+
+.kv-input--size-sm {
+  --kv-input-height: 1.625rem;
+  --kv-input-padding-inline: var(--kv-space-2);
+  --kv-input-radius: var(--kv-radius-md);
+  --kv-input-font-size: var(--kv-text-xs);
+}
+
+.kv-input--size-lg {
+  --kv-input-height: 2.5rem;
+  --kv-input-padding-inline: var(--kv-space-4);
+}
+
+/* States */
+
+.kv-input::placeholder {
+  color: var(--kv-text-placeholder);
+  /* Firefox dims placeholders by default; Kumo's colour is the whole rule. */
+  opacity: 1;
+}
+
+.kv-input:focus {
+  --kv-input-ring-width: 1.5px;
+  --kv-input-ring: color-mix(in oklab, var(--kv-focus) 50%, transparent);
+}
+
+.kv-input--error {
+  --kv-input-ring: var(--kv-danger);
+}
+
+.kv-input--error:focus {
+  --kv-input-ring-width: 1.5px;
+  --kv-input-ring: color-mix(in oklab, var(--kv-danger) 50%, transparent);
+}
+
+.kv-input:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kv-input {
+    transition: none;
+  }
+}

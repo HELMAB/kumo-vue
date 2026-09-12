@@ -208,6 +208,18 @@ export const color = {
     hairline: { light: { ref: "neutral.150" }, dark: { ref: "neutral.800" } },
     /** Perceivable control boundary: input borders, checkbox and radio outlines. */
     "line-strong": { light: { ref: "neutral.500" }, dark: { ref: "neutral.500" } },
+    /*
+     * The two halves of a popup arrow's border, which is `line` by another
+     * name: exactly one of them is painted in each mode, and it carries the
+     * value `line` carries there. They exist because an arrow's border cannot
+     * be one path - the outline has to sit outside the shape in light mode and
+     * inside it in dark, and the two geometries differ. Kumo names them the
+     * same way and for the same reason. The unpainted half is `oklch(0% 0 0 / 0)`
+     * rather than the `transparent` keyword, so that every value in this file
+     * stays a colour the build can measure.
+     */
+    "arrow-edge": { light: { value: "oklch(14.5% 0 0 / 0.1)" }, dark: { value: "oklch(0% 0 0 / 0)" } },
+    "arrow-stroke": { light: { value: "oklch(0% 0 0 / 0)" }, dark: { ref: "neutral.750" } },
   },
   status: {
     info: { light: { ref: "blue.600" }, dark: { ref: "blue.500" } },

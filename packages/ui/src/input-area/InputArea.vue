@@ -184,6 +184,9 @@ defineExpose({ resize });
 </template>
 
 <style>
+/* The field furniture and `.kv-input` itself, which this component wears. */
+@import "../shared/field.css";
+
 /*
  * Everything but the height comes from `.kv-input`, which this element also
  * carries. Kumo does the same - `inputVariants({ size }) + "h-auto py-2"` -

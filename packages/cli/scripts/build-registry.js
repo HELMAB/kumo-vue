@@ -35,7 +35,10 @@ const COMPONENTS = [
     internal: true,
     dependencies: [],
     registryDependencies: [],
-    files: [{ source: "shared/items.js", path: "shared/items.js" }],
+    files: [
+      { source: "shared/items.js", path: "shared/items.js" },
+      { source: "shared/field.css", path: "shared/field.css" },
+    ],
   },
   {
     name: "autocomplete",
@@ -189,7 +192,7 @@ const COMPONENTS = [
     description: "Text that names a form control, with optional and tooltip markers.",
     export: "Label",
     dependencies: ["reka-ui", "@kumo-vue/tokens"],
-    registryDependencies: ["button"],
+    registryDependencies: ["button", "tooltip"],
     files: [
       { source: "label/Label.vue", path: "label/Label.vue" },
       { source: "label/index.js", path: "label/index.js" },
@@ -200,7 +203,7 @@ const COMPONENTS = [
     description: "Single-line text field, on its own or in a labelled field.",
     export: "Input",
     dependencies: ["@kumo-vue/tokens"],
-    registryDependencies: [],
+    registryDependencies: ["shared"],
     files: [
       { source: "input/Input.vue", path: "input/Input.vue" },
       { source: "input/index.js", path: "input/index.js" },
@@ -217,7 +220,7 @@ const COMPONENTS = [
     description: "Multi-line text field, optionally growing with its content.",
     export: "InputArea",
     dependencies: ["@kumo-vue/tokens"],
-    registryDependencies: ["input"],
+    registryDependencies: ["input", "shared"],
     files: [
       { source: "input-area/InputArea.vue", path: "input-area/InputArea.vue" },
       { source: "input-area/useAutoResize.js", path: "input-area/useAutoResize.js" },
@@ -229,7 +232,7 @@ const COMPONENTS = [
     description: "Input with icons, addons, an inline suffix or attached buttons.",
     export: "InputGroup",
     dependencies: ["@kumo-vue/tokens"],
-    registryDependencies: ["button", "input"],
+    registryDependencies: ["button", "input", "shared"],
     files: [
       { source: "input-group/InputGroup.vue", path: "input-group/InputGroup.vue" },
       { source: "input-group/InputGroupAddon.vue", path: "input-group/InputGroupAddon.vue" },
@@ -239,6 +242,65 @@ const COMPONENTS = [
       { source: "input-group/context.js", path: "input-group/context.js" },
       { source: "input-group/zone.js", path: "input-group/zone.js" },
       { source: "input-group/index.js", path: "input-group/index.js" },
+    ],
+  },
+  {
+    name: "tooltip",
+    description: "Short explanation shown on hover or focus.",
+    export: "Tooltip",
+    dependencies: ["reka-ui", "@kumo-vue/tokens"],
+    registryDependencies: [],
+    files: [
+      { source: "tooltip/Tooltip.vue", path: "tooltip/Tooltip.vue" },
+      { source: "tooltip/TooltipProvider.vue", path: "tooltip/TooltipProvider.vue" },
+      { source: "tooltip/context.js", path: "tooltip/context.js" },
+      { source: "tooltip/maybeProvider.js", path: "tooltip/maybeProvider.js" },
+      { source: "tooltip/index.js", path: "tooltip/index.js" },
+    ],
+  },
+  {
+    name: "switch",
+    description: "On/off control for a setting that takes effect immediately.",
+    export: "Switch",
+    dependencies: ["@kumo-vue/tokens"],
+    registryDependencies: [],
+    files: [
+      { source: "switch/Switch.vue", path: "switch/Switch.vue" },
+      { source: "switch/index.js", path: "switch/index.js" },
+    ],
+  },
+  {
+    name: "radio",
+    description: "One choice from a short list, as a fieldset of radios.",
+    export: "RadioGroup",
+    dependencies: ["reka-ui", "@kumo-vue/tokens"],
+    registryDependencies: ["shared"],
+    files: [
+      { source: "radio/RadioGroup.vue", path: "radio/RadioGroup.vue" },
+      { source: "radio/index.js", path: "radio/index.js" },
+    ],
+  },
+  {
+    /* Wears `.kv-input`'s field styling, as InputArea does, so Input comes too. */
+    name: "sensitive-input",
+    description: "Masked field for a token or key, with reveal and copy.",
+    export: "SensitiveInput",
+    dependencies: ["@kumo-vue/tokens"],
+    registryDependencies: ["input", "shared"],
+    files: [
+      { source: "sensitive-input/SensitiveInput.vue", path: "sensitive-input/SensitiveInput.vue" },
+      { source: "sensitive-input/index.js", path: "sensitive-input/index.js" },
+    ],
+  },
+  {
+    name: "tag-input",
+    description: "Field that collects a list of short strings as chips.",
+    export: "TagInput",
+    dependencies: ["@kumo-vue/tokens"],
+    registryDependencies: ["button", "input", "shared"],
+    files: [
+      { source: "tag-input/TagInput.vue", path: "tag-input/TagInput.vue" },
+      { source: "tag-input/index.js", path: "tag-input/index.js" },
     ],
   },
   {

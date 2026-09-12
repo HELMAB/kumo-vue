@@ -17,6 +17,7 @@ import { computed, useSlots } from "vue";
 import { Primitive } from "reka-ui";
 
 import { Button } from "../button/index.js";
+import { Tooltip } from "../tooltip/index.js";
 
 defineOptions({ inheritAttrs: false });
 
@@ -27,14 +28,13 @@ const props = defineProps({
   showOptional: { type: Boolean, default: false },
   /** The id of the control this labels. Ignored when `as-content`. */
   for: { type: String, default: undefined },
-  /**
-   * Explanatory text, shown on an info button beside the label.
-   *
-   * Kumo renders this in its Tooltip. There is no Tooltip component here yet,
-   * so it is the native `title` attribute - the same stand-in Button makes for
-   * the same reason, and the same one-line change when Tooltip lands.
-   */
+  /** Explanatory text, shown in a tooltip on an info button beside the label. */
   tooltip: { type: String, default: "" },
+  /**
+   * Which side of the info button the tooltip prefers.
+   * @values top, right, bottom, left
+   */
+  tooltipSide: { type: String, default: "top" },
   /** Accessible name for the info button. */
   tooltipLabel: { type: String, default: "More information" },
   /**
@@ -73,27 +73,27 @@ const hasText = computed(() => Boolean(props.text || slots.default));
     </span>
 
     <!--
-      `title` rather than a bubble, per the note on the prop. It is still a
-      button and not a bare icon, so the text is reachable by keyboard focus
-      as well as by hover.
+      A button and not a bare icon, so the text is reachable by keyboard focus
+      as well as by hover - a tooltip on something untabbable is invisible to
+      anyone not using a mouse.
     -->
-    <Button
-      v-if="tooltip"
-      class="kv-label__info"
-      data-kumo-part="tooltip"
-      variant="ghost"
-      size="xs"
-      shape="square"
-      :title="tooltip"
-      :aria-label="tooltipLabel"
-      type="button"
-    >
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-        <circle cx="8" cy="8" r="6.25" />
-        <path d="M8 7.25v4" stroke-linecap="round" />
-        <circle cx="8" cy="4.9" r=".85" fill="currentColor" stroke="none" />
-      </svg>
-    </Button>
+    <Tooltip v-if="tooltip" :content="tooltip" :side="tooltipSide">
+      <Button
+        class="kv-label__info"
+        data-kumo-part="tooltip"
+        variant="ghost"
+        size="xs"
+        shape="square"
+        :aria-label="tooltipLabel"
+        type="button"
+      >
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <circle cx="8" cy="8" r="6.25" />
+          <path d="M8 7.25v4" stroke-linecap="round" />
+          <circle cx="8" cy="4.9" r=".85" fill="currentColor" stroke="none" />
+        </svg>
+      </Button>
+    </Tooltip>
   </Primitive>
 </template>
 
