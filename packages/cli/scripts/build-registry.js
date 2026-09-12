@@ -95,6 +95,29 @@ const COMPONENTS = [
     ],
   },
   {
+    name: "clipboard-text",
+    description: "Read-only field with a one-click copy-to-clipboard button.",
+    export: "ClipboardText",
+    dependencies: ["reka-ui", "@kumo-vue/tokens"],
+    /* The copy control is a ghost Button. */
+    registryDependencies: ["button"],
+    files: [
+      { source: "clipboard-text/ClipboardText.vue", path: "clipboard-text/ClipboardText.vue" },
+      { source: "clipboard-text/index.js", path: "clipboard-text/index.js" },
+    ],
+  },
+  {
+    name: "collapsible",
+    description: "Disclosure: a label that shows and hides the content below it.",
+    export: "Collapsible",
+    dependencies: ["reka-ui", "@kumo-vue/tokens"],
+    registryDependencies: [],
+    files: [
+      { source: "collapsible/Collapsible.vue", path: "collapsible/Collapsible.vue" },
+      { source: "collapsible/index.js", path: "collapsible/index.js" },
+    ],
+  },
+  {
     name: "dialog",
     description: "Modal window over the page, with everything behind it inert.",
     export: "Dialog",

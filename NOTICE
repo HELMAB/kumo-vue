@@ -57,6 +57,20 @@ In packages/ui - component design, behaviour and appearance:
     error ring, and the group's legend / description / error
     arrangement.
 
+  * ClipboardText. Its size scale and the field it is built from - an
+    input at the matching size with its padding removed - the split
+    between the value shown and the value copied, the copy control at
+    the inline end behind a hairline, the tick that replaces the copy
+    icon for 1.5 seconds, and the optional anchored bubble reading
+    "Copy" on hover and "Copied" on click.
+
+  * Collapsible. Its trigger and panel arrangement - a label with a caret
+    that turns over when open, over a panel with a rule down the reading
+    side and the spacing around it - the 100ms ease-out on both the
+    height and the caret, the rhythm between the panel's children, the
+    option to keep a closed panel mounted so what is inside it survives,
+    and the choice not to ship an accordion separately from it.
+
   * Dialog. Its two ARIA roles and when each applies, the four widths
     (288 / 384 / 512 / 768px) and the rule that content wider than the
     dialog scrolls inside it rather than stretching it, the option to
@@ -64,6 +78,13 @@ In packages/ui - component design, behaviour and appearance:
     top of the viewport over a scrim of the recessed surface, and the
     title / description / actions arrangement with a close control in
     the corner.
+
+  * Dropdown. The kinds of entry a menu is built from - action, link,
+    submenu, group, heading, separator, checkbox and radio item - the
+    dimensions and highlight treatment of each, the rule that an action
+    closes the menu and a toggle leaves it open, the inset alignment
+    that squares a label with the entries carrying icons, and the
+    destructive entry's colouring.
 
   * Tabs. Its two variants and their dimensions, the sliding indicator,
     the size scale, the horizontal overflow behaviour - drag to scroll,

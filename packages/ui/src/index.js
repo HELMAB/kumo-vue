@@ -4,6 +4,8 @@ export { Banner } from "./banner/index.js";
 export { Breadcrumbs } from "./breadcrumbs/index.js";
 export { Button } from "./button/index.js";
 export { Checkbox, CheckboxGroup } from "./checkbox/index.js";
+export { ClipboardText } from "./clipboard-text/index.js";
+export { Collapsible } from "./collapsible/index.js";
 export { Dialog } from "./dialog/index.js";
 export { Dropdown } from "./dropdown/index.js";
 export { Select } from "./select/index.js";

@@ -26,6 +26,8 @@ npx kumo-vue@latest add button
 | `Breadcrumbs` | Available |
 | `Button` | Available |
 | `Checkbox` · `CheckboxGroup` | Available |
+| `ClipboardText` | Available |
+| `Collapsible` | Available |
 | `Dialog` | Available |
 | `Dropdown` | Available |
 | `Tabs` | Available |
@@ -329,6 +331,194 @@ not, and in Vue the parent box is four lines of `computed` in userland —
 
 **No `labelTooltip`.** There is no Tooltip component here yet, as with Button's
 `title`. This will change when Tooltip lands.
+
+## ClipboardText
+
+A read-only field with a one-click copy button.
+
+```vue
+<ClipboardText text="0c239dd2" />
+
+<!-- a masked secret, copied whole -->
+<ClipboardText text="sk_live_***********" text-to-copy="sk_live_51H8_abc123" />
+
+<!-- "Copy" on hover, "Copied!" on click -->
+<ClipboardText text="npx kumo-vue add button" size="sm"
+               :tooltip="{ text: 'Copy', copiedText: 'Copied!', side: 'top' }" />
+```
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `text` | `string` — required | — |
+| `textToCopy` | `string` | — |
+| `size` | `sm` `base` `lg` | `lg` |
+| `tooltip` | `boolean` · `string` · `{ text, copiedText, side }` | `false` |
+| `copyLabel` | `string` | `"Copy to clipboard"` |
+| `copiedLabel` | `string` | `"Copied"` |
+| `dir` | `ltr` · `rtl` · unset | unset |
+| `to` | `string \| object` | `"body"` |
+
+Emits `copy` with the string that was put on the clipboard. No slots: `text` is
+what is shown and `textToCopy` is what is copied, so there is nothing a slot
+would add that those two do not already say.
+
+**The field is full width.** It has no width of its own — like Kumo's, which
+is its Input with the padding taken off — so it fills whatever it is put in.
+Give it a width, or a container with one.
+
+**`textToCopy` is what secrets are for.** Show `sk_live_***********` and copy
+the real key. Anything falsy is still copied, so an intentionally empty
+`text-to-copy=""` copies an empty string rather than falling back to `text`.
+
+**The confirmation is the tick, for 1.5 seconds.** The copy icon slides out of
+the button's clipped edge and a tick slides in — Kumo's timing and Kumo's
+arrangement, where exactly one of the two is ever in the layout, so the button
+does not change width as they swap. Copying again restarts the window.
+
+**`tooltip` is both the switch and the settings.** Off by default, as upstream.
+`tooltip` on its own takes the defaults, `tooltip="Copy link"` sets the hover
+text, and the object form sets all three. Kumo has only the object, so
+enabling the bubble with its defaults means writing `tooltip={{}}`.
+
+**Kumo's anchored toast is the same bubble.** Upstream runs a second Base UI
+toast manager whose viewport exists to put one "Copied" toast next to one
+button. Here the tooltip that is already anchored there says it instead: it
+stays up while the copy is confirming, ignores the click that would normally
+close it, and pops on each repeat — Kumo's bump, its curve and its timing.
+What a reader sees is what upstream shows; what the page carries is one popup
+instead of two.
+
+**The bubble is a label, not a target.** It never takes pointer events, so a
+second click lands on the button underneath rather than on the confirmation
+sitting over it.
+
+**Nothing is announced twice.** The bubble's text changes from "Copy" to
+"Copied", but the description a screen reader is pointed at does not — the
+confirmation is announced once, by a live region, and the button keeps its name
+throughout. Renaming the button instead, as a shorter implementation would,
+announces the change a second time to anyone sitting on it.
+
+**There is a fallback for pages without a secure context.** `navigator.clipboard`
+needs one, and a LAN preview or an internal tool behind a plain-HTTP proxy does
+not have it. Kumo keeps the old `execCommand` path for that case and puts the
+user's own selection back afterwards; both are carried over. A copy that fails
+anyway warns and confirms nothing.
+
+**The writing direction travels through the portal**, as Dialog's does — read
+from the field, where the bubble was written, since a `dir` set on part of the
+page never reaches something hanging off the body.
+
+**Motion is dropped under `prefers-reduced-motion`** — the icon swap, the
+bubble's entrance and the bump. Kumo drops the bump too.
+
+**This is the first Tooltip in the library.** Button's `title`, Checkbox's
+`labelTooltip` and Select's are still waiting on a `Tooltip` component; the
+bubble here is built out of Reka's tooltip primitives inside the one component
+that needs it, and should move to `Tooltip` when that lands.
+
+## Collapsible
+
+A disclosure: a label that shows and hides the content below it.
+
+```vue
+<Collapsible title="What is Kumo?">
+  <Text>Kumo is Cloudflare's design system.</Text>
+</Collapsible>
+
+<Collapsible v-model:open="open" title="Edit details" keep-mounted>
+  <Input label="Name" />
+</Collapsible>
+
+<!-- your own trigger, your own panel -->
+<Collapsible v-model:open="open" variant="plain">
+  <template #trigger="{ open }">
+    <Button variant="secondary" size="sm">{{ open ? "Hide" : "Show" }} details</Button>
+  </template>
+  <p class="my-panel">Styled however you like.</p>
+</Collapsible>
+```
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `open` | `boolean` | — |
+| `defaultOpen` | `boolean` | `false` |
+| `title` | `string` | `""` |
+| `variant` | `default` `plain` | `default` |
+| `disabled` | `boolean` | `false` |
+| `keepMounted` | `boolean` | `false` |
+
+Slots: `trigger` and `title` — both scoped, receiving `open` — and a default
+slot for the content, scoped with `open` and `toggle`. Emits `update:open`, so
+`v-model:open` works.
+
+Built on **Reka UI's Collapsible primitive**, the counterpart to the Base UI one
+Kumo uses. Reka owns the button semantics on the trigger, the measured height
+the panel animates to, and keeping a `keepMounted` panel reachable by the
+browser's own find-in-page.
+
+**One component, not five.** Kumo composes `Collapsible.Root`, `.Trigger`,
+`.Panel` and the pre-styled `.DefaultTrigger` and `.DefaultPanel`. Here the
+default styling is what you get, the `trigger` slot is `.Trigger` — it replaces
+the trigger rather than filling it, which is what Kumo's
+`<Collapsible.Trigger render={<Button />}>` does — and `variant="plain"` is
+`.Panel`. The same flattening Dialog and Dropdown make.
+
+**`title` is a prop and a slot.** A prop for a translated string, the slot for
+a label with markup in it. Both go inside the default trigger, next to the
+caret; the `trigger` slot replaces that whole button.
+
+**Open state works both ways.** With no `open` prop the disclosure keeps its
+own, starting from `defaultOpen`; bind `v-model:open` and the page owns it.
+`toggle`, handed to the default slot, then reports the intent rather than
+acting on it — so a "Collapse" button inside the panel works either way.
+
+**There is no Accordion, here or upstream.** One item open at a time is the
+`open` prop driven from an index, exactly as Kumo's own example does it:
+
+```vue
+<Collapsible
+  v-for="(item, i) in items"
+  :key="item.title"
+  :title="item.title"
+  :open="active === i"
+  @update:open="(open) => (active = open ? i : null)"
+>{{ item.content }}</Collapsible>
+```
+
+**`keepMounted` is for state that should survive being hidden** — a half-filled
+form, a scroll position, a running media element. It is off by default, as
+upstream, because a torn-down panel is the cheaper thing to be. What Reka adds
+over Kumo is that the kept panel is marked `hidden="until-found"`, so the
+browser's find-in-page can reach the text inside it and opens the disclosure
+when it does.
+
+**The height is animated, not transitioned.** The panel is removed once it has
+closed, and what Reka waits for before removing it is an animation ending — so
+`@keyframes` running to the `--reka-collapsible-content-height` Reka measures,
+rather than a `transition`. Kumo transitions instead, which Base UI's panel
+supports; the visible result is the same 100ms ease-out.
+
+**`plain` keeps the animation.** It drops the accent rule, the spacing and the
+rhythm between children — the decoration. Kumo's bare `Panel` has no animation
+at all, because upstream the animation is a class on `DefaultPanel`; opting
+into your own padding should not silently cost you the disclosure's behaviour.
+Bring your own padding if the content has focusable controls in it: the panel
+clips while it animates, and the default variant's padding is there to keep a
+focus ring off that edge.
+
+**The trigger resets itself.** Kumo calls these defensive resets and they are:
+without them a page's own `button` rules put a border and a background around
+what is meant to read as a heading. The one addition is a focus ring in
+`--kv-brand`, matching every other control here, where Kumo leaves the
+browser's default.
+
+**`aria-controls` points at the panel.** Reka assigns the panel its id when the
+panel first renders, which is after the trigger has already rendered — leaving
+an empty IDREF that nothing corrects until the first toggle. The id is read
+back once and bound, so it is either right or absent, never empty.
+
+**Motion is dropped under `prefers-reduced-motion`** — the panel's height and
+the caret's turn. Kumo animates regardless.
 
 ## Dialog
 
