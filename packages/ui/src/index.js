@@ -10,6 +10,7 @@ export { CommandPalette } from "./command-palette/index.js";
 export { DatePicker } from "./date-picker/index.js";
 export { Dialog } from "./dialog/index.js";
 export { Dropdown } from "./dropdown/index.js";
+export { Empty } from "./empty/index.js";
 export { Select } from "./select/index.js";
 export { Tabs } from "./tabs/index.js";
 export { Text } from "./text/index.js";

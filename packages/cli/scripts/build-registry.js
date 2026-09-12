@@ -173,6 +173,18 @@ const COMPONENTS = [
     ],
   },
   {
+    name: "empty",
+    description: "Placeholder for a list, table or page with nothing to show.",
+    export: "Empty",
+    dependencies: ["reka-ui", "@kumo-vue/tokens"],
+    /* The command line is a ClipboardText, which brings a Button with it. */
+    registryDependencies: ["clipboard-text"],
+    files: [
+      { source: "empty/Empty.vue", path: "empty/Empty.vue" },
+      { source: "empty/index.js", path: "empty/index.js" },
+    ],
+  },
+  {
     name: "select",
     description: "Choose one option, or several, from a fixed list.",
     export: "Select",

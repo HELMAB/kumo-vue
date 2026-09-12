@@ -32,6 +32,7 @@ npx kumo-vue@latest add button
 | `DatePicker` | Available |
 | `Dialog` | Available |
 | `Dropdown` | Available |
+| `Empty` | Available |
 | `Tabs` | Available |
 | `Text` | Available |
 | `Toaster` · `toast` | Available |
@@ -978,6 +979,78 @@ navigation into and out of submenus, and the `role="menu"` /
 and is rendered with `<component :is>` — icons vary per entry, so a single slot
 would have to branch on the label. It is the closest thing to Kumo passing
 `icon={TrashIcon}`.
+
+## Empty
+
+The placeholder a list, table or page shows when it has nothing in it.
+
+```vue
+<!-- at minimum, a heading -->
+<Empty title="No results found" description="Try adjusting your search." />
+
+<!-- the full thing -->
+<Empty
+  title="No packages found"
+  description="Get started by installing your first package."
+  command-line="npm install @cloudflare/kumo"
+  size="lg"
+>
+  <template #icon><PackageIcon /></template>
+  <Button variant="brand">Browse the registry</Button>
+  <Button variant="ghost">Read the docs</Button>
+</Empty>
+```
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `title` | `string` — required unless the slot supplies one | — |
+| `description` | `string` | — |
+| `commandLine` | `string` | — |
+| `size` | `sm` · `base` · `lg` | `base` |
+| `titleAs` | `h1`…`h6` · `p` | `"h2"` |
+| `as` | `string \| object` | `"div"` |
+| `copyLabel` | `string` | `"Copy command"` |
+| `copiedLabel` | `string` | `"Copied"` |
+
+| Slot | Replaces |
+| --- | --- |
+| `icon` | the mark above the heading (Kumo's `icon` prop) |
+| `title` | the `title` prop, for markup a string cannot carry |
+| `description` | the `description` prop |
+| default | the row of buttons and links at the bottom (Kumo's `contents` prop) |
+
+Emits `copy` with the command that was put on the clipboard.
+
+**`title` and `description` are props, not slots** — the same pairing Banner
+makes, so a translated string goes straight in. The slots are there for the
+cases a string cannot express, and win when both are given.
+
+**The heading level is yours to set.** Kumo hardcodes `<h2>`, which is right for
+an empty state filling a page under the `<h1>` and wrong for one inside a card
+already under an `<h3>` — the outline skips a level with nothing to say it did.
+`titleAs` sets it; `p` keeps the placeholder out of the outline entirely. This
+is the same split `Text` makes between what something looks like and what it
+means. A placeholder with no heading at all warns in development: it is the only
+thing telling a screen reader *why* the region it landed in is blank.
+
+**The command line is a `ClipboardText`.** Upstream inlines a second copy button
+here, with its own `useState` and its own `navigator.clipboard` call. This one
+reuses the component that already exists, so the command gets the things that
+field has and Kumo's inline version does not: the `execCommand` fallback for
+pages without a secure context, a live region that announces the copy, and an
+icon swap that does not change the button's width. `add empty` pulls it in.
+
+**The `$` is generated content**, not an element. It is the prompt, not part of
+the command, so it stays out of the copied string *and* out of a selection —
+which is what upstream's `select-none` span buys, without the span.
+
+**The icon is decorative.** It is hidden from assistive technology, because the
+heading underneath already says what the icon is illustrating. An SVG with no
+dimensions of its own is drawn at 48px, matching Kumo's demos; one that sets
+`width` keeps it.
+
+**The card fills its container** and has no width of its own, so put it in the
+space the missing content would have occupied.
 
 ## Tabs
 
