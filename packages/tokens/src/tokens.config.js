@@ -164,7 +164,7 @@ export const color = {
     strong: { light: { value: "oklch(14.5% 0 0)" }, dark: { ref: "neutral.50" } },
     subtle: { light: { ref: "neutral.550" }, dark: { ref: "neutral.400" } },
     placeholder: { light: { ref: "neutral.500" }, dark: { ref: "neutral.400" } },
-    inactive: { light: { ref: "neutral.400" }, dark: { ref: "neutral.600" } },
+    inactive: { light: { ref: "neutral.300" }, dark: { ref: "neutral.600" } },
     inverse: { light: { ref: "neutral.50" }, dark: { ref: "neutral.900" } },
     brand: { light: { ref: "brand.text" }, dark: { ref: "brand.dark" } },
     link: { light: { ref: "blue.800" }, dark: { ref: "blue.400" } },

@@ -72,7 +72,7 @@ const omit = (source, predicate) =>
 const bindings = computed(() => {
   const named = attrs["aria-label"] || attrs["aria-labelledby"];
   const base = {
-    "data-kumo-component": isLink.value ? "LinkButton" : "Button",
+    "data-kumo-component": attrs["data-kumo-component"] ?? (isLink.value ? "LinkButton" : "Button"),
     ...(!slots.default && !named && hasTitle.value ? { "aria-label": String(props.title) } : {}),
   };
 

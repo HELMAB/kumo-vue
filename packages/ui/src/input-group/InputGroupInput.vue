@@ -5,8 +5,9 @@
  * error from the group rather than from props of its own - which is why
  * setting them here warns instead of working.
  */
-import { computed, useAttrs, watchEffect } from "vue";
+import { computed, inject, useAttrs, watchEffect } from "vue";
 
+import { TOOLBAR_INPUT_GROUP, TOOLBAR_ITEM } from "../shared/toolbar.js";
 import { useInputGroup } from "./context.js";
 
 defineOptions({ name: "InputGroupInput", inheritAttrs: false });
@@ -22,6 +23,7 @@ defineEmits(["update:modelValue"]);
 
 const attrs = useAttrs();
 const group = useInputGroup();
+const toolbar = inject(TOOLBAR_INPUT_GROUP, null);
 
 /* The group owns the id so its label, visible or invisible, can point at it. */
 const inputId = computed(() => attrs.id ?? group?.inputId);
@@ -51,7 +53,7 @@ if (import.meta.env?.DEV) {
 
 <template>
   <input
-    v-bind="attrs"
+    v-bind="toolbar ? { 'aria-label': toolbar.label.value, 'aria-labelledby': toolbar.labelledBy.value, [TOOLBAR_ITEM]: '', ...attrs } : attrs"
     :id="inputId"
     :class="classes"
     :type="type"

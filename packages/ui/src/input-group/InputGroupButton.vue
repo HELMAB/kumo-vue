@@ -25,7 +25,9 @@ const props = defineProps({
   /** Overrides the size the group would give it. */
   size: { type: String, default: undefined },
   /** @values base, square, circle */
-  shape: { type: String, default: "square" },
+  shape: { type: String, default: "base" },
+  /** Disables this button. Defaults to the group's `disabled`. */
+  disabled: { type: Boolean, default: undefined },
 });
 
 const group = useInputGroup();
@@ -54,7 +56,7 @@ const classes = computed(() => [
     :variant="variant ?? 'ghost'"
     :size="size"
     :shape="shape"
-    :disabled="group?.disabled.value || undefined"
+    :disabled="disabled ?? group?.disabled.value ?? false"
     data-kumo-part="button"
   >
     <slot />

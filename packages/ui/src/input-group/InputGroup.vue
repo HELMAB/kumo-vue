@@ -368,6 +368,9 @@ const groupClasses = computed(() => [
   border: 1px solid var(--kv-line);
   box-shadow: none;
   background-color: var(--kv-surface-control);
+}
+
+.kv-input-group__input--individual:first-child {
   border-start-start-radius: var(--kv-ig-radius);
   border-end-start-radius: var(--kv-ig-radius);
 }
@@ -513,6 +516,11 @@ const groupClasses = computed(() => [
 
 .kv-input-group__button--attached.kv-button:hover {
   z-index: 1;
+}
+
+.kv-input-group__button--attached.kv-button:disabled {
+  background-color: var(--kv-surface-overlay);
+  color: var(--kv-text-inactive) !important;
 }
 
 .kv-input-group__button--attached.kv-button:focus-visible {

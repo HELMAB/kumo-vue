@@ -38,6 +38,7 @@ const COMPONENTS = [
     files: [
       { source: "shared/items.js", path: "shared/items.js" },
       { source: "shared/field.css", path: "shared/field.css" },
+      { source: "shared/toolbar.js", path: "shared/toolbar.js" },
     ],
   },
   {
@@ -469,6 +470,64 @@ const COMPONENTS = [
     files: [
       { source: "skeleton-line/SkeletonLine.vue", path: "skeleton-line/SkeletonLine.vue" },
       { source: "skeleton-line/index.js", path: "skeleton-line/index.js" },
+    ],
+  },
+  {
+    name: "table-of-contents",
+    description: "Presentational section navigation with an active indicator rail and scroll tracking.",
+    export: "TableOfContents",
+    dependencies: ["reka-ui", "@kumo-vue/tokens"],
+    registryDependencies: [],
+    files: [
+      { source: "table-of-contents/TableOfContents.vue", path: "table-of-contents/TableOfContents.vue" },
+      { source: "table-of-contents/TableOfContentsTitle.vue", path: "table-of-contents/TableOfContentsTitle.vue" },
+      { source: "table-of-contents/TableOfContentsList.vue", path: "table-of-contents/TableOfContentsList.vue" },
+      { source: "table-of-contents/TableOfContentsItem.vue", path: "table-of-contents/TableOfContentsItem.vue" },
+      { source: "table-of-contents/TableOfContentsGroup.vue", path: "table-of-contents/TableOfContentsGroup.vue" },
+      { source: "table-of-contents/useTableOfContentsActiveId.js", path: "table-of-contents/useTableOfContentsActiveId.js" },
+      { source: "table-of-contents/index.js", path: "table-of-contents/index.js" },
+    ],
+  },
+  {
+    name: "popover",
+    description: "Accessible popup with rich content, anchored to a trigger.",
+    export: "Popover",
+    dependencies: ["reka-ui", "@kumo-vue/tokens"],
+    registryDependencies: [],
+    files: [
+      { source: "popover/Popover.vue", path: "popover/Popover.vue" },
+      { source: "popover/index.js", path: "popover/index.js" },
+    ],
+  },
+  {
+    name: "toolbar",
+    description: "Groups controls into one compact card with arrow-key navigation.",
+    export: "Toolbar",
+    dependencies: ["reka-ui", "@kumo-vue/tokens"],
+    registryDependencies: ["shared", "button", "input-group"],
+    files: [
+      { source: "toolbar/Toolbar.vue", path: "toolbar/Toolbar.vue" },
+      { source: "toolbar/ToolbarButton.vue", path: "toolbar/ToolbarButton.vue" },
+      { source: "toolbar/ToolbarLink.vue", path: "toolbar/ToolbarLink.vue" },
+      { source: "toolbar/ToolbarInput.vue", path: "toolbar/ToolbarInput.vue" },
+      { source: "toolbar/ToolbarInputGroup.vue", path: "toolbar/ToolbarInputGroup.vue" },
+      { source: "toolbar/index.js", path: "toolbar/index.js" },
+    ],
+  },
+  {
+    name: "pagination",
+    description: "Page navigation controls with a page count and page size selector.",
+    export: "Pagination",
+    dependencies: ["reka-ui", "@kumo-vue/tokens"],
+    registryDependencies: ["input-group", "select"],
+    files: [
+      { source: "pagination/Pagination.vue", path: "pagination/Pagination.vue" },
+      { source: "pagination/PaginationInfo.vue", path: "pagination/PaginationInfo.vue" },
+      { source: "pagination/PaginationPageSize.vue", path: "pagination/PaginationPageSize.vue" },
+      { source: "pagination/PaginationControls.vue", path: "pagination/PaginationControls.vue" },
+      { source: "pagination/PaginationSeparator.vue", path: "pagination/PaginationSeparator.vue" },
+      { source: "pagination/context.js", path: "pagination/context.js" },
+      { source: "pagination/index.js", path: "pagination/index.js" },
     ],
   },
 ];

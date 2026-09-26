@@ -170,6 +170,16 @@ function onOpenChange(value) {
     opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .kv-tooltip {
+    outline-offset: -1px;
+  }
+}
+
+[data-theme="dark"] .kv-tooltip {
+  outline-offset: -1px;
+}
+
 .kv-tooltip[data-state="delayed-open"],
 .kv-tooltip[data-state="instant-open"] {
   animation: kv-tooltip-in 150ms cubic-bezier(0.4, 0, 0.2, 1);
