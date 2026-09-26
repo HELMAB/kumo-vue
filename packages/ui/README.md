@@ -25,14 +25,23 @@ npx kumo-vue@latest add button
 | `Banner` | Available |
 | `Breadcrumbs` | Available |
 | `Button` | Available |
+| `ButtonGroup` | Available |
 | `Checkbox` · `CheckboxGroup` | Available |
 | `ClipboardText` | Available |
+| `CloudflareLogo` · `PoweredByCloudflare` | Available |
 | `Collapsible` | Available |
 | `CommandPalette` | Available |
 | `DatePicker` | Available |
 | `Dialog` | Available |
 | `Dropdown` | Available |
 | `Empty` | Available |
+| `Grid` · `GridItem` | Available |
+| `InlineCopyText` | Available |
+| `LayerCard` · `LayerCardPrimary` · `LayerCardSecondary` | Available |
+| `Link` · `LinkExternalIcon` · `LinkProvider` | Available |
+| `Loader` | Available |
+| `Meter` | Available |
+| `SkeletonLine` | Available |
 | `Tabs` | Available |
 | `Text` | Available |
 | `Toaster` · `toast` | Available |
@@ -1398,6 +1407,161 @@ its TypeScript prop types. This port is JavaScript, so the equivalent is a
 development-only `console.warn` when `shape="square"` or `"circle"` has no
 label, `aria-label`, `aria-labelledby` or `title`. It costs nothing in a
 production build.
+
+## ButtonGroup
+
+```vue
+<ButtonGroup aria-label="Deploy">
+  <Button variant="primary">Deploy</Button>
+  <Dropdown :items="items">
+    <template #trigger>
+      <Button variant="primary" shape="square" aria-label="More deploy options">
+        <template #icon><ChevronDown /></template>
+      </Button>
+    </template>
+  </Dropdown>
+</ButtonGroup>
+```
+
+A layout wrapper with `role="group"`, which cannot be overridden. Children
+keep their own `variant`, `size` and `shape`; the group flattens the inner
+corners, overlaps the rings by 1px and drops each button's drop shadow. For a
+set of independent controls, a toolbar is the right pattern instead.
+
+## CloudflareLogo
+
+```vue
+<CloudflareLogo style="inline-size: 10rem" />
+<CloudflareLogo variant="glyph" color="white" />
+<PoweredByCloudflare />
+```
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `variant` | `glyph` `full` | `full` |
+| `color` | `color` `black` `white` | `color` |
+
+`PoweredByCloudflare` takes `color` and `href` (default
+`https://www.cloudflare.com`) and opens in a new tab.
+`generateCloudflareLogoSvg({ variant, color })` returns the SVG markup as a
+string, for copying or embedding outside Vue.
+
+## Grid
+
+```vue
+<Grid variant="3up" gap="sm">
+  <GridItem>1</GridItem>
+  <GridItem>2</GridItem>
+  <GridItem>3</GridItem>
+</Grid>
+```
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `variant` | `2up` `side-by-side` `2-1` `1-2` `1-3up` `3up` `4up` `6up` `1-2-4up` | — (one column) |
+| `gap` | `none` `sm` `base` `lg` | `base` |
+| `mobileDivider` | `boolean` — `4up` only | `false` |
+
+Breakpoints are Tailwind's, as in Kumo: 48rem, 64rem and 80rem. Unknown values
+fall back to `2up` and `base` with a development warning.
+
+## InlineCopyText
+
+```vue
+<InlineCopyText :labels="{ copyAction: 'Copy database ID', copied: 'Copied' }">0c239dd2</InlineCopyText>
+<InlineCopyText value="f86b3f10…" variant="body"><strong>f86b3f10…</strong></InlineCopyText>
+```
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `value` | `string` — required when the content is not plain text | the text content |
+| `variant` | `mono-secondary` `mono` `body` `secondary` `success` `error` | `mono-secondary` |
+| `size` `bold` `truncate` `as` | as on Text | — / `false` / `true` / `span` |
+| `labels` | `{ copyAction, copied }` | `Copy to clipboard` / `Copied` |
+
+Emits `copy` after a successful write. A click handler that calls
+`preventDefault()` cancels the copy. The icon shows on hover and focus, and
+also when any ancestor with the class `group` is hovered or focused within —
+the Vue equivalent of Kumo responding to a Tailwind `group`.
+
+## LayerCard
+
+```vue
+<LayerCard>
+  <LayerCardSecondary>Next steps</LayerCardSecondary>
+  <LayerCardPrimary>Get started with Kumo</LayerCardPrimary>
+</LayerCard>
+
+<LayerCard style="padding: 1rem">A single surface</LayerCard>
+```
+
+With `LayerCardSecondary` or `LayerCardPrimary` among its children the card
+takes the layered treatment; otherwise it is a single surface. `as` /
+`asChild` stand in for Kumo's `render` prop. Kumo's deprecated `Surface`
+wrapper is not ported.
+
+## Link
+
+```vue
+<Link href="/docs">Learn more</Link>
+<Link href="https://cloudflare.com" target="_blank" rel="noopener noreferrer">
+  Visit Cloudflare <LinkExternalIcon />
+</Link>
+<Link :as="RouterLink" to="/dashboard">Dashboard</Link>
+```
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `variant` | `inline` `current` `plain` | `inline` |
+| `as` / `asChild` | element or component | `LinkProvider`'s component, else `a` |
+
+`<LinkProvider :component="AppLink">` sets the component every `Link` below it
+renders as. **`to` is only deprecated on a plain anchor.** Kumo warns on `to`
+everywhere; in Vue it is what `RouterLink` takes, so it passes through to a
+component and is mapped to `href` (with a warning) only on the default `<a>`.
+
+## Loader
+
+```vue
+<Loader />
+<Loader size="sm" aria-label="Chargement" />
+<Loader :size="40" />
+```
+
+`size` is `sm` (16px), `base` (24px), `lg` (32px) or a number of pixels. The
+spinner draws in `currentColor` and is a `role="status"` labelled "Loading".
+
+## Meter
+
+```vue
+<Meter label="Storage used" :value="65" />
+<Meter label="API requests" :value="75" custom-value="750 / 1,000" />
+```
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `value` · `label` | `number` · `string` | required |
+| `min` `max` | `number` | `0` `100` |
+| `customValue` | `string` | — |
+| `showValue` | `boolean` | `true` |
+| `format` `locale` `getAriaValueText` | as on Base UI's Meter | — |
+| `trackClass` `indicatorClass` | class | — |
+
+A `role="meter"` with the same ARIA and percent formatting as the Base UI
+Meter Kumo wraps. Set `--kv-meter-fill` to recolour the indicator.
+
+## SkeletonLine
+
+```vue
+<SkeletonLine />
+<SkeletonLine :min-width="40" :max-width="60" />
+<SkeletonLine :block-height="32" />
+```
+
+Width, shimmer duration and delay are picked at random within
+`minWidth`/`maxWidth` (percent, 30–100), `minDuration`/`maxDuration` (seconds,
+1.3–1.7) and `minDelay`/`maxDelay` (0–0.5). `blockHeight` wraps the line in a
+container of that height that centres it; a number is pixels.
 
 ## Accessibility: where Kumo's colours fall short of AA
 
