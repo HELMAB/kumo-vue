@@ -413,9 +413,9 @@ watch(() => props.dir, readDir);
   border-inline-start: 1px solid var(--kv-line);
 }
 
-/* The field clips, so the ring is drawn inside the button rather than around it. */
-.kv-clipboard-text__copy.kv-button:focus-visible {
-  outline-offset: -2px;
+/* The field clips, so the ring is drawn inside the button, as in Kumo. */
+.kv-clipboard-text__copy.kv-button {
+  --kv-button-ring-inset: inset;
 }
 
 /* Icons */

@@ -53,8 +53,7 @@ test("unknown components name the ones that exist", async () => {
 
 test("dependency resolution is depth-first and deduplicated", async () => {
   const resolved = await resolveWithDependencies(["button", "button"]);
-  assert.equal(resolved.length, 1);
-  assert.equal(resolved[0].name, "button");
+  assert.deepEqual(resolved.map((c) => c.name), ["loader", "tooltip", "button"]);
 });
 
 test("add writes the component into the default directory", async () => {
@@ -64,6 +63,13 @@ test("add writes the component into the default directory", async () => {
     assert.deepEqual(written.sort(), [
       join("src/components/ui/button", "Button.vue"),
       join("src/components/ui/button", "index.js"),
+      join("src/components/ui/loader", "Loader.vue"),
+      join("src/components/ui/loader", "index.js"),
+      join("src/components/ui/tooltip", "Tooltip.vue"),
+      join("src/components/ui/tooltip", "TooltipProvider.vue"),
+      join("src/components/ui/tooltip", "context.js"),
+      join("src/components/ui/tooltip", "index.js"),
+      join("src/components/ui/tooltip", "maybeProvider.js"),
     ].sort());
 
     const sfc = await readFile(join(dir, "src/components/ui/button/Button.vue"), "utf8");

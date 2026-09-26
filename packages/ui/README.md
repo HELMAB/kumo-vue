@@ -1372,10 +1372,11 @@ import { Button } from "@/components/ui/button";
 
 | Prop | Type | Default | Notes |
 | --- | --- | --- | --- |
-| `variant` | `primary` `secondary` `ghost` `destructive` `secondary-destructive` `outline` | `secondary` | |
+| `variant` | `primary` `secondary` `ghost` `destructive` `secondary-destructive` `outline` | `secondary` | `ghost` on `as="a"`, as Kumo's LinkButton |
 | `size` | `xs` `sm` `base` `lg` | `base` | |
 | `shape` | `base` `square` `circle` | `base` | `square` and `circle` are icon-only |
-| `loading` | `boolean` | `false` | Swaps the icon for a spinner and blocks interaction |
+| `loading` | `boolean` | `false` | Swaps the icon for a `Loader` and blocks interaction |
+| `title` | `string \| number` | — | Shows a `Tooltip`, and names an icon-only button |
 | `disabled` | `boolean` | `false` | |
 | `as` | `string \| object` | `"button"` | Render as another element, e.g. `"a"` |
 | `asChild` | `boolean` | `false` | Style the single child instead of rendering an element |
@@ -1386,7 +1387,7 @@ import { Button } from "@/components/ui/button";
 | Slot | Notes |
 | --- | --- |
 | default | The label |
-| `icon` | Rendered before the label, sized to `1em`. Replaced by the spinner while loading |
+| `icon` | Rendered before the label, sized to `1em`. Replaced by a `Loader` while loading |
 
 Icons come through the slot rather than a prop, so no icon library is a
 dependency. Anything that renders an `<svg>` works; it inherits `currentColor`.
@@ -1401,6 +1402,14 @@ styling one as disabled would be a lie. Kumo makes the same swap.
 **A loading link is inert.** Anchors have no `disabled`, so a loading one gets
 `aria-disabled="true"`, has its listeners stripped, and has navigation
 prevented.
+
+**`title` is a Tooltip, not the native attribute.** As in Kumo, the button
+becomes the tooltip's trigger. A disabled or loading button cannot receive
+hover, so its tooltip goes on an `inline-flex` wrapper instead.
+
+**Focus is a ring, not an outline.** Mouse focus tints the 1px ring, keyboard
+focus widens it to 2px in the brand colour; primary and destructive keep their
+own ring colour for both, the way Kumo's class merge leaves them.
 
 **Icon-only buttons must have an accessible name.** Kumo enforces this through
 its TypeScript prop types. This port is JavaScript, so the equivalent is a
@@ -1616,15 +1625,6 @@ both modes, which on a dark background makes the hover state *less* visible
 than the resting fill (2.80:1). Dark mode lightens instead. The button itself
 does not read that token — it mixes hover from the fill exactly as Kumo does —
 so this only affects code using `--kv-brand-hover` directly.
-
-**`xs` icon-only buttons are 20px, not 14px.** Kumo's `compactSize.xs` is
-`size-3.5` (14px) while its `size.xs` height is `h-5` (20px). A 14px target is
-below any reasonable minimum and inconsistent with the row height, so the
-compact shapes track the button height at every size.
-
-**No tooltip.** Kumo wraps a button in its `Tooltip` when `title` is set. There
-is no Tooltip component here yet, so `title` is passed through as the native
-attribute. This will change when Tooltip lands.
 
 **No `RefreshButton`.** Kumo ships a preset that is `shape="square"` plus a
 spinning icon. That is three lines in userland and does not need to be a

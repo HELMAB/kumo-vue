@@ -137,7 +137,7 @@ export const primitives = {
      */
     dark: "oklch(65% 0.17 258)",
     darkHover: "oklch(71% 0.15 256)",
-    darkFill: "oklch(51.95% 0.2092 260)",
+    darkFill: "oklch(51.948% 0.2324 260)",
     /*
      * Kumo darkens to blue-700 on hover in both modes, which on a dark surface
      * leaves the hover state (2.80:1) less visible than the resting fill.
@@ -161,7 +161,7 @@ export const primitives = {
 export const color = {
   text: {
     default: { light: { ref: "neutral.900" }, dark: { ref: "neutral.100" } },
-    strong: { light: { ref: "neutral.950" }, dark: { ref: "neutral.50" } },
+    strong: { light: { value: "oklch(14.5% 0 0)" }, dark: { ref: "neutral.50" } },
     subtle: { light: { ref: "neutral.550" }, dark: { ref: "neutral.400" } },
     placeholder: { light: { ref: "neutral.500" }, dark: { ref: "neutral.400" } },
     inactive: { light: { ref: "neutral.400" }, dark: { ref: "neutral.600" } },

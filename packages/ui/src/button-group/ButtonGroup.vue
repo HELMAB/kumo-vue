@@ -24,7 +24,7 @@ defineOptions({ inheritAttrs: false });
 
 .kv-button-group > * {
   position: relative;
-  --kv-shadow-drop: transparent;
+  --kv-button-drop: 0 0 #0000;
 }
 
 .kv-button-group > :focus-visible,

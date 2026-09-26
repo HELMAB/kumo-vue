@@ -1,36 +1,26 @@
 <!-- Ported from Cloudflare Kumo's Button (MIT). See /NOTICE. -->
 <script setup>
 /**
- * Button — the primary action trigger.
- *
- * Renders a `<button>` by default. Pass `as="a"` with an `href` for a link
- * styled as a button, or `as-child` to hand the styling to a router link:
- *
- *   <Button as="a" href="/docs" variant="ghost">Docs</Button>
- *   <Button as-child><RouterLink to="/docs">Docs</RouterLink></Button>
- *
- * Ported from Cloudflare Kumo's React Button. Variant, size and shape names
- * match Kumo's; see the README for where the two deliberately differ.
+ * Button — the primary action trigger. `as="a"` is Kumo's LinkButton: an anchor
+ * styled as a button, ghost by default. `title` shows a Tooltip, as in Kumo.
  */
 import { computed, useAttrs, useSlots, watchEffect } from "vue";
 import { Primitive } from "reka-ui";
+import { Loader } from "../loader/index.js";
+import { Tooltip } from "../tooltip/index.js";
 
 defineOptions({ inheritAttrs: false });
 
 const props = defineProps({
   /**
-   * Visual style.
-   * `primary` and `destructive` are the high-emphasis, filled treatments;
-   * the rest are quieter.
+   * Visual style. Defaults to `secondary`, or `ghost` on `as="a"`.
    * @values primary, secondary, ghost, destructive, secondary-destructive, outline
    */
-  variant: { type: String, default: "secondary" },
+  variant: { type: String, default: undefined },
   /** @values xs, sm, base, lg */
   size: { type: String, default: "base" },
   /**
-   * `square` and `circle` drop the label and size the button to its icon.
-   * Both require an accessible name — `aria-label`, `aria-labelledby`, or
-   * `title`.
+   * `square` and `circle` are icon-only and need `aria-label`, `aria-labelledby` or `title`.
    * @values base, square, circle
    */
   shape: { type: String, default: "base" },
@@ -38,6 +28,8 @@ const props = defineProps({
   loading: { type: Boolean, default: false },
   /** Disables the button. A disabled `as="a"` renders a `<button>` instead. */
   disabled: { type: Boolean, default: false },
+  /** Shows a Tooltip with this text, and names an icon-only button. */
+  title: { type: [String, Number], default: undefined },
   /** Element or component to render as. */
   as: { type: [String, Object], default: "button" },
   /** Render the single child element instead of an element of our own. */
@@ -49,70 +41,57 @@ const props = defineProps({
 const slots = useSlots();
 const attrs = useAttrs();
 
-/* The fill each of these resolves to is defined in CSS, not here - see below. */
 const EMPHASIS_VARIANTS = new Set(["primary", "destructive"]);
+const ANCHOR_ONLY = ["href", "target", "rel", "download", "hreflang", "media", "ping", "referrerpolicy"];
 
-const isEmphasis = computed(() => EMPHASIS_VARIANTS.has(props.variant));
+const isLink = computed(() => props.as === "a");
+const variant = computed(() => props.variant ?? (isLink.value ? "ghost" : "secondary"));
+const isEmphasis = computed(() => EMPHASIS_VARIANTS.has(variant.value));
 const isCompact = computed(() => props.shape === "square" || props.shape === "circle");
 const isInert = computed(() => props.disabled || props.loading);
+const hasTitle = computed(() => props.title !== undefined && props.title !== "");
 
-/**
- * A disabled anchor is still focusable and still navigable, so `disabled` on
- * `as="a"` renders a real `<button disabled>` instead - the same swap Kumo
- * makes. Anchor-only attributes go with it.
- */
-const renderAs = computed(() =>
-  props.disabled && props.as === "a" ? "button" : props.as,
-);
+const renderAs = computed(() => (props.disabled && isLink.value ? "button" : props.as));
 const isAnchor = computed(() => renderAs.value === "a");
 
 const classes = computed(() => [
   "kv-button",
-  `kv-button--${props.variant}`,
+  `kv-button--${variant.value}`,
   `kv-button--size-${props.size}`,
   `kv-button--shape-${props.shape}`,
-  { "kv-button--emphasis": isEmphasis.value, "kv-button--loading": props.loading },
+  {
+    "kv-button--emphasis": isEmphasis.value,
+    "kv-button--link": isLink.value,
+    "kv-button--disabled": props.disabled,
+  },
 ]);
-
-const ANCHOR_ONLY = ["href", "target", "rel", "download", "hreflang", "ping", "referrerpolicy"];
 
 const omit = (source, predicate) =>
   Object.fromEntries(Object.entries(source).filter(([key]) => !predicate(key)));
 
-/**
- * Everything bound to the rendered element, merged here rather than in the
- * template so listener stripping is under our control.
- */
 const bindings = computed(() => {
-  const base = { "data-kumo-component": "Button" };
+  const named = attrs["aria-label"] || attrs["aria-labelledby"];
+  const base = {
+    "data-kumo-component": isLink.value ? "LinkButton" : "Button",
+    ...(!slots.default && !named && hasTitle.value ? { "aria-label": String(props.title) } : {}),
+  };
 
   if (isAnchor.value) {
-    /*
-     * An anchor has no `disabled`, so a loading one is marked `aria-disabled`
-     * and its listeners are dropped - the same stripping Kumo applies when it
-     * swaps a disabled link for a button. `onClick` below stops navigation,
-     * which is not a listener and so survives the strip.
-     */
     const passed = props.loading ? omit(attrs, (k) => /^on[A-Z]/.test(k)) : attrs;
     return {
+      ...(props.external ? { target: "_blank", rel: "noopener noreferrer" } : {}),
       ...passed,
       ...base,
-      ...(props.external ? { target: "_blank", rel: "noopener noreferrer" } : {}),
       ...(props.loading ? { "aria-disabled": "true" } : {}),
     };
   }
 
-  /* Dropping href and friends keeps the swapped-in button valid HTML. */
-  const passed = props.as === "a" ? omit(attrs, (k) => ANCHOR_ONLY.includes(k)) : attrs;
-  return {
-    ...passed,
-    ...base,
-    type: attrs.type ?? "button",
-    disabled: isInert.value || undefined,
-  };
+  const passed = isLink.value
+    ? omit(attrs, (k) => ANCHOR_ONLY.includes(k.toLowerCase()) || /^on[A-Z]/.test(k))
+    : attrs;
+  return { ...passed, ...base, type: attrs.type ?? "button", disabled: isInert.value || undefined };
 });
 
-/** Swallow activation on a loading anchor, which has no `disabled` to do it. */
 function onClick(event) {
   if (isAnchor.value && props.loading) {
     event.preventDefault();
@@ -120,134 +99,82 @@ function onClick(event) {
   }
 }
 
-/**
- * Kumo enforces an accessible name on icon-only buttons through its prop
- * types. Without TypeScript the equivalent has to be a runtime check, so it
- * warns in development and costs nothing in a production build.
- */
 if (import.meta.env?.DEV) {
   watchEffect(() => {
-    const named =
-      attrs["aria-label"] || attrs["aria-labelledby"] || attrs.title;
+    const named = attrs["aria-label"] || attrs["aria-labelledby"] || hasTitle.value;
     if (isCompact.value && !slots.default && !named) {
       console.warn(
-        '[kumo-vue] Button shape="' +
-          props.shape +
-          '" is icon-only but has no accessible name. ' +
+        `[kumo-vue] Button shape="${props.shape}" is icon-only but has no accessible name. ` +
           "Add aria-label, aria-labelledby, or title.",
       );
     }
   });
 }
-
 </script>
 
 <template>
-  <Primitive
-    v-bind="bindings"
-    :as="renderAs"
-    :as-child="asChild"
-    :class="classes"
-    :aria-busy="loading || undefined"
-    @click="onClick"
-  >
-    <!--
-      The emphasis fill is a pseudo-element behind the content, so the label
-      stays a direct child and `gap` still applies to it.
-    -->
-    <svg
-      v-if="loading"
-      class="kv-button__spinner"
-      viewBox="0 0 16 16"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="2" opacity="0.25" />
-      <path
-        d="M8 1.5a6.5 6.5 0 0 1 6.5 6.5"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-      />
-    </svg>
-    <span v-else-if="$slots.icon" class="kv-button__icon">
-      <slot name="icon" />
+  <Tooltip v-if="hasTitle && isInert" :content="String(title)">
+    <span class="kv-button__tooltip-target">
+      <Primitive v-bind="bindings" :as="renderAs" :as-child="asChild" :class="classes" @click="onClick">
+        <Loader v-if="loading" :size="size === 'lg' ? 16 : 14" />
+        <span v-else-if="$slots.icon" class="kv-button__icon"><slot name="icon" /></span>
+        <slot />
+      </Primitive>
     </span>
+  </Tooltip>
+  <Tooltip v-else-if="hasTitle" :content="String(title)">
+    <Primitive v-bind="bindings" :as="renderAs" :as-child="asChild" :class="classes" @click="onClick">
+      <Loader v-if="loading" :size="size === 'lg' ? 16 : 14" />
+      <span v-else-if="$slots.icon" class="kv-button__icon"><slot name="icon" /></span>
+      <slot />
+    </Primitive>
+  </Tooltip>
+  <Primitive v-else v-bind="bindings" :as="renderAs" :as-child="asChild" :class="classes" @click="onClick">
+    <Loader v-if="loading" :size="size === 'lg' ? 16 : 14" />
+    <span v-else-if="$slots.icon" class="kv-button__icon"><slot name="icon" /></span>
     <slot />
   </Primitive>
 </template>
 
 <style>
-/*
- * Every dimension here is either a token or a control height. Control heights
- * are local on purpose: a button's 36px is not a spacing value, and putting it
- * in the token package would imply a control-size scale that does not exist.
- *
- * No directional properties — padding-inline, not padding-left — so the button
- * mirrors under `dir="rtl"` with no extra stylesheet.
- */
+/* Rules follow Kumo's Tailwind cascade: same specificity, same order. */
 .kv-button {
   --kv-button-radius: var(--kv-radius-lg);
   --kv-button-height: 2.25rem;
   --kv-button-padding: var(--kv-space-3);
   --kv-button-gap: var(--kv-space-1-5);
   --kv-button-font-size: var(--kv-text-base);
+  --kv-button-line-height: 1.5;
+  --kv-button-ring-width: 0px;
+  --kv-button-ring-color: transparent;
 
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   flex-shrink: 0;
-  width: max-content;
-
+  inline-size: max-content;
   block-size: var(--kv-button-height);
-  /* Browsers give <button> a default block padding; Tailwind's preflight
-     zeroes it for Kumo, and there is no preflight here. */
   padding-block: 0;
   padding-inline: var(--kv-button-padding);
   gap: var(--kv-button-gap);
-
   border: 0;
   border-radius: var(--kv-button-radius);
   font-family: inherit;
   font-size: var(--kv-button-font-size);
   font-weight: 500;
-  line-height: var(--kv-leading-normal);
+  line-height: var(--kv-button-line-height);
   text-decoration: none;
   white-space: nowrap;
   user-select: none;
   cursor: pointer;
-  box-shadow: 0 1px 2px 0 var(--kv-shadow-drop);
-  transition:
-    background-color 100ms ease,
-    box-shadow 100ms ease,
-    color 100ms ease;
+  box-shadow:
+    var(--kv-button-ring-inset,) 0 0 0 var(--kv-button-ring-width) var(--kv-button-ring-color),
+    var(--kv-button-drop, 0 1px 2px 0 rgb(0 0 0 / 0.05));
 }
 
-.kv-button:focus-visible {
-  outline: 2px solid var(--kv-brand);
-  outline-offset: 1px;
-}
-
-.kv-button:disabled,
-.kv-button[aria-disabled="true"] {
-  cursor: not-allowed;
-  color: var(--kv-text-subtle);
-  opacity: 0.5;
-}
-
-/* An anchor rendered as a button should still allow text selection. */
-.kv-button:is(a) {
+.kv-button--link {
+  text-decoration: none !important;
   user-select: text;
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .kv-button {
-    transition: none;
-  }
-}
-
-/* Sizes */
 
 .kv-button--size-xs {
   --kv-button-height: 1.25rem;
@@ -255,6 +182,7 @@ if (import.meta.env?.DEV) {
   --kv-button-padding: var(--kv-space-1-5);
   --kv-button-gap: var(--kv-space-1);
   --kv-button-font-size: var(--kv-text-xs);
+  --kv-button-line-height: calc(1 / 0.75);
 }
 
 .kv-button--size-sm {
@@ -263,6 +191,7 @@ if (import.meta.env?.DEV) {
   --kv-button-padding: var(--kv-space-2);
   --kv-button-gap: var(--kv-space-1);
   --kv-button-font-size: var(--kv-text-xs);
+  --kv-button-line-height: calc(1 / 0.75);
 }
 
 .kv-button--size-lg {
@@ -271,10 +200,9 @@ if (import.meta.env?.DEV) {
   --kv-button-gap: var(--kv-space-2);
 }
 
-/* Shapes */
-
 .kv-button--shape-square,
 .kv-button--shape-circle {
+  justify-content: center;
   padding-inline: 0;
   inline-size: var(--kv-button-height);
 }
@@ -283,82 +211,37 @@ if (import.meta.env?.DEV) {
   --kv-button-radius: var(--kv-radius-full);
 }
 
-/* Variants */
-
-.kv-button--secondary,
-.kv-button--secondary-destructive,
-.kv-button--outline {
-  background-color: var(--kv-surface-base);
-  color: var(--kv-text-default);
-  box-shadow:
-    0 0 0 1px var(--kv-line),
-    0 1px 2px 0 var(--kv-shadow-drop);
+.kv-button--shape-square.kv-button--size-xs,
+.kv-button--shape-circle.kv-button--size-xs {
+  --kv-button-height: 0.875rem;
 }
 
-.kv-button--outline {
-  background-color: transparent;
+.kv-button--disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
-.kv-button--secondary-destructive {
-  color: var(--kv-text-danger);
-}
-
-.kv-button--secondary:not(:disabled):hover,
-.kv-button--secondary-destructive:not(:disabled):hover {
-  background-color: var(--kv-surface-tint);
-}
-
-.kv-button--outline:not(:disabled):hover {
-  color: var(--kv-text-strong);
-  box-shadow:
-    0 0 0 1px var(--kv-line-strong),
-    0 1px 2px 0 var(--kv-shadow-drop);
-}
-
-.kv-button--ghost {
-  background-color: transparent;
-  color: var(--kv-text-default);
-  box-shadow: none;
-}
-
-.kv-button--ghost:not(:disabled):hover {
-  background-color: var(--kv-surface-tint);
-}
-
-/*
- * Emphasis fill (primary, destructive).
- *
- * A soft top-down gradient with an inset highlight, matching Kumo exactly:
- * same 15% white top stop, same 1px outset ring at 10% black, and a hover that
- * lightens the top stop to 30% white.
- *
- * This puts the white label below WCAG AA — 3.46:1 on primary, 2.68:1 on
- * hover. That is Kumo's design, kept here for visual parity and reported by
- * `scripts/check-contrast.js` rather than silently shipped. Overriding
- * `--kv-brand` and `--kv-danger-fill` with darker values restores AA without
- * touching this file; see the README.
- */
 .kv-button--primary {
   --kv-button-fill-source: var(--kv-brand);
 }
 
 .kv-button--destructive {
-  /*
-   * Split from `--kv-danger` so the fill can be retargeted for contrast
-   * without moving the status colour with it.
-   */
   --kv-button-fill-source: var(--kv-danger-fill);
 }
 
 .kv-button--emphasis {
+  --kv-button-ring-width: 1px;
+  --kv-button-ring-color: color-mix(in oklch, var(--kv-button-fill-source), black 10%);
+
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  color: #fff;
   background-color: color-mix(in oklch, var(--kv-button-fill-source), white 30%);
-  box-shadow:
-    0 0 0 1px color-mix(in oklch, var(--kv-button-fill-source), black 10%),
-    0 1px 2px 0 var(--kv-shadow-drop);
+  color: #fff !important;
+}
+
+.kv-button.kv-button--emphasis {
+  gap: var(--kv-space-1-5);
 }
 
 .kv-button--emphasis::before {
@@ -375,15 +258,114 @@ if (import.meta.env?.DEV) {
   box-shadow: inset 0 1px 0 0 color-mix(in oklch, var(--kv-button-fill-source), white 30%);
 }
 
-.kv-button--emphasis:not(:disabled):hover::before {
-  background: linear-gradient(
-    to bottom,
-    color-mix(in oklch, var(--kv-button-fill-source), white 30%),
-    var(--kv-button-fill-source)
-  );
+.kv-button--secondary,
+.kv-button--secondary-destructive {
+  --kv-button-ring-width: 1px;
+  --kv-button-ring-color: var(--kv-line);
+
+  background-color: var(--kv-surface-base);
+  color: var(--kv-text-default) !important;
 }
 
-/* Colour-mix is unavailable in older engines; fall back to the flat fill. */
+.kv-button--secondary-destructive {
+  color: var(--kv-text-danger) !important;
+}
+
+.kv-button--ghost {
+  --kv-button-drop: 0 0 #0000;
+
+  background-color: inherit;
+  color: var(--kv-text-default);
+}
+
+.kv-button--outline {
+  --kv-button-ring-width: 1px;
+  --kv-button-ring-color: var(--kv-line);
+
+  background-color: transparent;
+  color: var(--kv-text-default);
+  transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
+  transition-duration: 100ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (hover: hover) {
+  .kv-button--emphasis:hover::before {
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--kv-button-fill-source), white 30%),
+      var(--kv-button-fill-source)
+    );
+  }
+
+  .kv-button--ghost:hover {
+    background-color: var(--kv-surface-tint);
+  }
+
+  .kv-button--secondary:not(:disabled):hover {
+    background-color: var(--kv-surface-tint);
+  }
+
+  .kv-button--outline:not(:disabled):hover {
+    color: var(--kv-text-strong);
+  }
+
+  .kv-button--secondary-destructive:not(:disabled):hover {
+    --kv-button-ring-color: color-mix(in oklab, var(--kv-danger) 30%, transparent);
+
+    color: var(--kv-text-danger) !important;
+  }
+
+  .kv-button--outline:not(:disabled):hover {
+    --kv-button-ring-color: color-mix(in oklab, var(--kv-focus) 25%, transparent);
+  }
+}
+
+.kv-button:focus {
+  --kv-button-ring-color: color-mix(in oklab, var(--kv-focus) 50%, transparent);
+
+  outline: none;
+}
+
+.kv-button:focus-visible {
+  --kv-button-ring-width: 2px;
+  --kv-button-ring-color: var(--kv-brand);
+
+  outline: none;
+}
+
+/* Kumo's class merge drops the base focus colours for these, so the emphasis ring stays. */
+.kv-button--emphasis:is(:focus, :focus-visible, :active) {
+  --kv-button-ring-color: color-mix(in oklch, var(--kv-button-fill-source), black 10%);
+}
+
+.kv-button:disabled {
+  cursor: not-allowed;
+  color: var(--kv-text-subtle);
+}
+
+.kv-button--secondary:disabled,
+.kv-button--secondary-destructive:disabled {
+  background-color: color-mix(in oklab, var(--kv-surface-base) 50%, transparent);
+}
+
+.kv-button--secondary:disabled {
+  color: color-mix(in oklab, var(--kv-text-default) 70%, transparent) !important;
+}
+
+.kv-button--secondary-destructive:disabled {
+  color: color-mix(in oklab, var(--kv-text-danger) 70%, transparent) !important;
+}
+
+.kv-button--emphasis:disabled {
+  opacity: 0.5;
+}
+
+.kv-button--secondary[data-state="open"],
+.kv-button--secondary-destructive[data-state="open"] {
+  background-color: var(--kv-surface-base);
+}
+
 @supports not (color: color-mix(in oklch, red, blue)) {
   .kv-button--emphasis::before {
     background: var(--kv-button-fill-source);
@@ -391,10 +373,15 @@ if (import.meta.env?.DEV) {
   }
 }
 
-/* Icon and spinner */
+.kv-button.kv-tooltip__trigger {
+  cursor: pointer;
+}
 
-.kv-button__icon,
-.kv-button__spinner {
+.kv-button__tooltip-target {
+  display: inline-flex;
+}
+
+.kv-button__icon {
   display: inline-flex;
   flex-shrink: 0;
   inline-size: 1em;
@@ -404,27 +391,5 @@ if (import.meta.env?.DEV) {
 .kv-button__icon > svg {
   inline-size: 100%;
   block-size: 100%;
-}
-
-.kv-button--size-lg .kv-button__spinner,
-.kv-button--size-lg .kv-button__icon {
-  inline-size: 1.125em;
-  block-size: 1.125em;
-}
-
-.kv-button__spinner {
-  animation: kv-button-spin 700ms linear infinite;
-}
-
-@keyframes kv-button-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .kv-button__spinner {
-    animation-duration: 2.4s;
-  }
 }
 </style>

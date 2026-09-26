@@ -70,10 +70,11 @@ describe("emphasis variants", () => {
 });
 
 describe("loading and disabled", () => {
-  it("loading disables the button and marks it busy", () => {
+  it("loading disables the button without the disabled dimming", () => {
     const wrapper = mountButton({ loading: true });
     expect(wrapper.attributes("disabled")).toBeDefined();
-    expect(wrapper.attributes("aria-busy")).toBe("true");
+    expect(wrapper.classes()).not.toContain("kv-button--disabled");
+    expect(mountButton({ disabled: true }).classes()).toContain("kv-button--disabled");
   });
 
   it("loading replaces the icon slot with a spinner", () => {
@@ -82,19 +83,20 @@ describe("loading and disabled", () => {
 
     const loading = mountButton({ loading: true }, { slots });
     expect(loading.find('[data-test="icon"]').exists()).toBe(false);
-    expect(loading.find(".kv-button__spinner").exists()).toBe(true);
+    expect(loading.find('svg[role="status"]').attributes("style")).toContain("width: 14px");
+    expect(mountButton({ loading: true, size: "lg" }).find('svg[role="status"]').attributes("style")).toContain("width: 16px");
   });
 
   it("transitions from non-loading to loading and back", async () => {
     const wrapper = mountButton({ loading: false });
-    expect(wrapper.find(".kv-button__spinner").exists()).toBe(false);
+    expect(wrapper.find('svg[role="status"]').exists()).toBe(false);
 
     await wrapper.setProps({ loading: true });
-    expect(wrapper.find(".kv-button__spinner").exists()).toBe(true);
+    expect(wrapper.find('svg[role="status"]').exists()).toBe(true);
     expect(wrapper.attributes("disabled")).toBeDefined();
 
     await wrapper.setProps({ loading: false });
-    expect(wrapper.find(".kv-button__spinner").exists()).toBe(false);
+    expect(wrapper.find('svg[role="status"]').exists()).toBe(false);
     expect(wrapper.attributes("disabled")).toBeUndefined();
   });
 
@@ -115,6 +117,13 @@ describe("as an anchor", () => {
     expect(wrapper.attributes("type")).toBeUndefined();
   });
 
+  it("is a ghost LinkButton by default, as in Kumo", () => {
+    const wrapper = mountButton({ as: "a" }, { attrs: { href: "/docs" } });
+    expect(wrapper.classes()).toContain("kv-button--ghost");
+    expect(wrapper.attributes("data-kumo-component")).toBe("LinkButton");
+    expect(mountButton({ as: "a", variant: "primary" }).classes()).toContain("kv-button--primary");
+  });
+
   it("external opens in a new tab with a safe rel", () => {
     const wrapper = mountButton({ as: "a", external: true }, { attrs: { href: "https://x.test" } });
     expect(wrapper.attributes("target")).toBe("_blank");
@@ -130,6 +139,7 @@ describe("as an anchor", () => {
     expect(wrapper.attributes("href")).toBeUndefined();
     expect(wrapper.attributes("target")).toBeUndefined();
     expect(wrapper.attributes("disabled")).toBeDefined();
+    expect(wrapper.attributes("data-kumo-component")).toBe("LinkButton");
   });
 
   it("a loading anchor is marked disabled and swallows activation", async () => {
@@ -182,6 +192,29 @@ describe("icon-only accessible name", () => {
     mountButton({ shape: "base" }, { slots: { default: "Save" } });
     expect(spy).not.toHaveBeenCalled();
     spy.mockRestore();
+  });
+});
+
+describe("title", () => {
+  it("wraps the button in a Tooltip instead of a native title", () => {
+    const wrapper = mountButton({ title: "Refresh" }, { slots: { default: "Go" } });
+    const button = wrapper.find("button");
+    expect(button.attributes("title")).toBeUndefined();
+    expect(button.classes()).toContain("kv-tooltip__trigger");
+    expect(button.attributes("aria-label")).toBeUndefined();
+  });
+
+  it("names an icon-only button with the title", () => {
+    const wrapper = mountButton({ title: "Refresh", shape: "square" });
+    expect(wrapper.find("button").attributes("aria-label")).toBe("Refresh");
+  });
+
+  it("puts a disabled button's tooltip on a wrapper, which can still be hovered", () => {
+    const wrapper = mountButton({ title: "Not now", disabled: true }, { slots: { default: "Go" } });
+    const target = wrapper.find(".kv-button__tooltip-target");
+    expect(target.exists()).toBe(true);
+    expect(target.classes()).toContain("kv-tooltip__trigger");
+    expect(target.find("button").attributes("disabled")).toBeDefined();
   });
 });
 

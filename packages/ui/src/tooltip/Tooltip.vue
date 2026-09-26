@@ -12,7 +12,7 @@
  * link is rendered as itself; anything else gets a transparent button wrapper,
  * because a tooltip that only opens on hover is invisible to a keyboard.
  */
-import { computed } from "vue";
+import { computed, onUnmounted, ref } from "vue";
 import { TooltipArrow, TooltipContent, TooltipPortal, TooltipRoot, TooltipTrigger } from "reka-ui";
 
 import { MaybeProvider } from "./maybeProvider.js";
@@ -32,6 +32,8 @@ const props = defineProps({
   align: { type: String, default: "center" },
   /** Wait before opening, in milliseconds. */
   delay: { type: Number, default: 600 },
+  /** Wait before closing, in milliseconds. */
+  closeDelay: { type: Number, default: 0 },
   /** Held open, ignoring hover and focus. */
   open: { type: Boolean, default: undefined },
   /** Disables the tooltip without removing it, leaving the trigger alone. */
@@ -42,7 +44,7 @@ const props = defineProps({
   to: { type: [String, Object], default: "body" },
 });
 
-defineEmits(["update:open"]);
+const emit = defineEmits(["update:open"]);
 
 const SIDES = new Set(["top", "right", "bottom", "left"]);
 const ALIGNS = new Set(["start", "center", "end"]);
@@ -51,16 +53,33 @@ const side = computed(() => (SIDES.has(props.side) ? props.side : "top"));
 const align = computed(() => (ALIGNS.has(props.align) ? props.align : "center"));
 
 const hasContent = computed(() => Boolean(props.content));
+
+const held = ref(false);
+let closeTimer;
+onUnmounted(() => clearTimeout(closeTimer));
+
+function onOpenChange(value) {
+  clearTimeout(closeTimer);
+  if (value || props.closeDelay <= 0) {
+    held.value = value;
+    emit("update:open", value);
+    return;
+  }
+  closeTimer = setTimeout(() => {
+    held.value = false;
+    emit("update:open", false);
+  }, props.closeDelay);
+}
 </script>
 
 <template>
   <!-- Brings a provider only when there is not one already; see maybeProvider.js. -->
   <MaybeProvider :delay-duration="delay">
     <TooltipRoot
-      :open="open"
+      :open="open ?? held"
       :delay-duration="delay"
       :disable-hoverable-content="false"
-      @update:open="$emit('update:open', $event)"
+      @update:open="onOpenChange"
     >
       <TooltipTrigger
         :as-child="asChild"
@@ -76,7 +95,7 @@ const hasContent = computed(() => Boolean(props.content));
           data-kumo-part="content"
           :side="side"
           :align="align"
-          :side-offset="10"
+          :side-offset="0"
         >
           <slot name="content">{{ content }}</slot>
 
@@ -137,27 +156,27 @@ const hasContent = computed(() => Boolean(props.content));
      geometry is measured against the same box in both modes. */
   outline: 1px solid var(--kv-line);
   box-shadow:
-    0 4px 6px -1px var(--kv-shadow-elevated),
-    0 2px 4px -2px var(--kv-shadow-elevated);
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
 
   font-family: var(--kv-font-sans);
   font-size: var(--kv-text-sm);
-  line-height: var(--kv-leading-normal);
+  line-height: calc(1 / 0.85);
 
   /* It grows out of the edge it is anchored to, not out of its own middle. */
   transform-origin: var(--reka-tooltip-content-transform-origin);
   transition:
-    transform 150ms ease,
-    opacity 150ms ease;
+    transform 150ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .kv-tooltip[data-state="delayed-open"],
 .kv-tooltip[data-state="instant-open"] {
-  animation: kv-tooltip-in 150ms ease;
+  animation: kv-tooltip-in 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .kv-tooltip[data-state="closed"] {
-  animation: kv-tooltip-out 150ms ease;
+  animation: kv-tooltip-out 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes kv-tooltip-in {
@@ -185,7 +204,7 @@ const hasContent = computed(() => Boolean(props.content));
  */
 .kv-tooltip__arrow {
   display: block;
-  transform: rotate(180deg);
+  transform: translateY(-2px) rotate(180deg);
 }
 
 .kv-tooltip__arrow-fill {

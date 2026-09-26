@@ -468,9 +468,19 @@ const groupClasses = computed(() => [
 
 /* Inline: inside the ring, so it must not paint one of its own. */
 .kv-input-group__button--inline.kv-button {
-  box-shadow: none;
+  --kv-button-drop: 0 0 #0000;
+
   position: relative;
   z-index: 1;
+}
+
+.kv-input-group__button--inline.kv-button:focus {
+  --kv-button-ring-width: 0px;
+}
+
+.kv-input-group__button--inline.kv-button:focus-visible {
+  --kv-button-ring-width: 1.5px;
+  --kv-button-ring-color: color-mix(in oklab, var(--kv-focus) 50%, transparent);
 }
 
 /*

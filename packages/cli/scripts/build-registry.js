@@ -356,7 +356,8 @@ const COMPONENTS = [
     description: "Action trigger with six variants, four sizes and icon-only shapes.",
     export: "Button",
     dependencies: ["reka-ui", "@kumo-vue/tokens"],
-    registryDependencies: [],
+    /* The loading spinner is a Loader and `title` is a Tooltip, as in Kumo. */
+    registryDependencies: ["loader", "tooltip"],
     files: [
       { source: "button/Button.vue", path: "button/Button.vue" },
       { source: "button/index.js", path: "button/index.js" },
