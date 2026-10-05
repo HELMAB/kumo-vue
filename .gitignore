@@ -5,5 +5,5 @@ dist/
 .vite/
 demo/
 kumo-ui-docs/
-# Generated from packages/ui by `pnpm --filter kumo-vue build`
+# Generated from packages/ui by `npm run build -w kumo-vue`
 packages/cli/registry/

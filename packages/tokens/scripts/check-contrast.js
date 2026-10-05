@@ -1,7 +1,7 @@
 /**
  * WCAG AA audit over every declared contrast pair, in both modes.
  *
- * Run standalone (`pnpm contrast`) for the report, or imported by the build,
+ * Run standalone (`npm run contrast`) for the report, or imported by the build,
  * which refuses to emit output while a non-exempt pair is failing.
  */
 

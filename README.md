@@ -1,3 +1,10 @@
+<p>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/kumo-vue-wordmark-white.svg">
+    <img src=".github/assets/kumo-vue-wordmark.svg" alt="Kumo Vue" height="40">
+  </picture>
+</p>
+
 # Kumo Vue
 
 [Cloudflare Kumo][kumo]'s design system, for Vue.
@@ -50,17 +57,17 @@ Early. Tokens and the first component exist.
 ## Development
 
 ```sh
-pnpm install
-pnpm build      # tokens, then the CLI registry
-pnpm test       # every package
-pnpm contrast   # WCAG audit across tokens and components
+npm install
+npm run build  # tokens, then the CLI registry
+npm test       # every package
+npm run contrast  # WCAG audit across tokens and components
 ```
 
-Requires Node 18 or newer and pnpm 9.
+Requires Node 18 or newer and npm 9 or newer (npm workspaces). `.nvmrc` pins Node 24.
 
 `packages/ui` is the source of truth for components. `packages/cli/registry/`
 is generated from it, so after changing a component run
-`pnpm --filter kumo-vue build` to regenerate what `add` ships.
+`npm run build -w kumo-vue` to regenerate what `add` ships.
 
 ## Design principles
 

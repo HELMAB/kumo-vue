@@ -1594,7 +1594,7 @@ Measured from Kumo's own site:
 | Warning text on its tint (badge, banner) | 4.01:1 | 4.5:1 |
 | Warning as a status fill | 2.43:1 | 3:1 |
 
-`pnpm contrast`, in this package and in `tokens`, prints every one of these
+`npm run contrast`, in this package and in `tokens`, prints every one of these
 each run marked `BELOW … accepted by design`. They do not fail the build,
 because matching Kumo is the point of the port — but they are never silent, and
 a genuine regression in anything else still fails.
@@ -1640,15 +1640,15 @@ component.
 ## Development
 
 ```sh
-pnpm test       # component behaviour, via vitest + jsdom
-pnpm contrast   # WCAG audit of the emphasis gradients
+npm test       # component behaviour, via vitest + jsdom
+npm run contrast  # WCAG audit of the emphasis gradients
 ```
 
 After changing a component, regenerate the CLI registry so `add` ships the
 change:
 
 ```sh
-pnpm --filter kumo-vue build
+npm run build -w kumo-vue
 ```
 
 ## Licence

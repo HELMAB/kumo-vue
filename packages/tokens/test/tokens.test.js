@@ -1,4 +1,4 @@
-/** Smoke tests over the generated output. Run after `pnpm build`. */
+/** Smoke tests over the generated output. Run after `npm run build`. */
 
 import { test } from "node:test";
 import assert from "node:assert/strict";

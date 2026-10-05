@@ -1,11 +1,17 @@
 {
-  "name": "kumo-vue",
+  "name": "kumo-vue-monorepo",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@9.12.0",
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=18",
+    "npm": ">=9"
+  },
   "scripts": {
-    "build": "pnpm --filter @kumo-vue/tokens build && pnpm --filter kumo-vue build",
-    "test": "pnpm -r test",
-    "contrast": "pnpm --filter @kumo-vue/tokens contrast && pnpm --filter @kumo-vue/ui contrast"
+    "build": "npm run build -w @kumo-vue/tokens && npm run build -w kumo-vue",
+    "test": "npm test --workspaces --if-present",
+    "contrast": "npm run contrast -w @kumo-vue/tokens && npm run contrast -w @kumo-vue/ui"
   }
 }

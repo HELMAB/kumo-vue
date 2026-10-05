@@ -11,7 +11,7 @@ Kumo in React, the vocabulary here should already be familiar.
 ## Install
 
 ```sh
-pnpm add @kumo-vue/tokens
+npm install @kumo-vue/tokens
 ```
 
 ## Use
@@ -179,7 +179,7 @@ To supply script-specific fonts, override the token after importing:
 
 ## Contrast
 
-`pnpm contrast` audits every declared foreground/background pair in both
+`npm run contrast` audits every declared foreground/background pair in both
 modes. Translucent tints are composited over their backdrop first, so what is
 measured is what renders. Body text is held to 4.5:1 (WCAG AA 1.4.3), large
 text and non-text boundaries to 3:1 (1.4.11).
@@ -235,9 +235,9 @@ and one value cannot satisfy both.
 ## Development
 
 ```sh
-pnpm build      # regenerate dist/ from src/tokens.config.js
-pnpm contrast   # print the WCAG audit
-pnpm test       # smoke tests over the generated output
+npm run build  # regenerate dist/ from src/tokens.config.js
+npm run contrast  # print the WCAG audit
+npm test       # smoke tests over the generated output
 ```
 
 `src/tokens.config.js` is the single source of truth. The CSS and the

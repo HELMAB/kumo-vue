@@ -35,7 +35,7 @@ const banner = (what) => `/**
  *
  * GENERATED FILE - DO NOT EDIT.
  * Source: packages/tokens/src/tokens.config.js
- * Regenerate: pnpm --filter @kumo-vue/tokens build
+ * Regenerate: npm run build -w @kumo-vue/tokens
  *
  * ${CREDIT}
  */`;
@@ -344,5 +344,5 @@ console.log(
 );
 console.log(
   `  Contrast: ${results.length - belowTarget}/${results.length} pairs pass; ` +
-    `${belowTarget} below target (exempt or accepted - run \`pnpm contrast\` for the list).`,
+    `${belowTarget} below target (exempt or accepted - run \`npm run contrast\` for the list).`,
 );
