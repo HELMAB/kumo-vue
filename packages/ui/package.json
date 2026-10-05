@@ -6,7 +6,8 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    ".": "./src/index.js"
+    ".": "./src/index.js",
+    "./code": "./src/code-highlighted/index.js"
   },
   "scripts": {
     "contrast": "node scripts/check-contrast.js",
@@ -15,7 +16,8 @@
   "peerDependencies": {
     "@internationalized/date": "^3.5.0",
     "reka-ui": "^2.0.0",
-    "vue": "^3.4.0"
+    "vue": "^3.4.0",
+    "shiki": "^3.0.0 || ^4.0.0"
   },
   "devDependencies": {
     "@internationalized/date": "^3.5.0",
@@ -23,7 +25,13 @@
     "@vue/test-utils": "^2.4.6",
     "jsdom": "^25.0.0",
     "reka-ui": "^2.0.0",
+    "shiki": "^3.23.0",
     "vitest": "^2.1.0",
     "vue": "^3.5.0"
+  },
+  "peerDependenciesMeta": {
+    "shiki": {
+      "optional": true
+    }
   }
 }

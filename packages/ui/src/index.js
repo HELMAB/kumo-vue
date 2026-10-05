@@ -14,6 +14,7 @@ export { DatePicker } from "./date-picker/index.js";
 export { Dialog } from "./dialog/index.js";
 export { Dropdown } from "./dropdown/index.js";
 export { Empty } from "./empty/index.js";
+export { Flow, FlowAnchor, FlowList, FlowNode, FlowParallel } from "./flow/index.js";
 export { Grid, GridItem } from "./grid/index.js";
 export { InlineCopyText } from "./inline-copy-text/index.js";
 export { InputArea } from "./input-area/index.js";
@@ -31,6 +32,35 @@ export { Popover } from "./popover/index.js";
 export { RadioGroup } from "./radio/index.js";
 export { Select } from "./select/index.js";
 export { SensitiveInput } from "./sensitive-input/index.js";
+export {
+  Sidebar,
+  SidebarClose,
+  SidebarCollapsible,
+  SidebarCollapsibleContent,
+  SidebarCollapsibleTrigger,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarLoading,
+  SidebarMenu,
+  SidebarMenuBadge,
+  SidebarMenuButton,
+  SidebarMenuChevron,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  SidebarProvider,
+  SidebarRail,
+  SidebarResizeHandle,
+  SidebarSeparator,
+  SidebarSlidingView,
+  SidebarSlidingViews,
+  SidebarTrigger,
+  useSidebar,
+} from "./sidebar/index.js";
 export { SkeletonLine } from "./skeleton-line/index.js";
 export { Switch } from "./switch/index.js";
 export {
@@ -41,6 +71,18 @@ export {
   TableOfContentsTitle,
   useTableOfContentsActiveId,
 } from "./table-of-contents/index.js";
+export {
+  Table,
+  TableBody,
+  TableCell,
+  TableCheckCell,
+  TableCheckHead,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableResizeHandle,
+  TableRow,
+} from "./table/index.js";
 export { Tabs } from "./tabs/index.js";
 export { TagInput } from "./tag-input/index.js";
 export { Text } from "./text/index.js";

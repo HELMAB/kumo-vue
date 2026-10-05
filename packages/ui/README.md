@@ -29,6 +29,7 @@ npx kumo-vue@latest add button
 | `Checkbox` · `CheckboxGroup` | Available |
 | `ClipboardText` | Available |
 | `CloudflareLogo` · `PoweredByCloudflare` | Available |
+| `CodeHighlighted` · `ShikiProvider` · `useShikiHighlighter` (from `@kumo-vue/ui/code`, needs `shiki`) | Available |
 | `Collapsible` | Available |
 | `Combobox` | Available |
 | `CommandPalette` | Available |
@@ -36,6 +37,7 @@ npx kumo-vue@latest add button
 | `Dialog` | Available |
 | `Dropdown` | Available |
 | `Empty` | Available |
+| `Flow` · `FlowNode` · `FlowParallel` · `FlowList` · `FlowAnchor` | Available |
 | `Grid` · `GridItem` | Available |
 | `InlineCopyText` | Available |
 | `LayerCard` · `LayerCardPrimary` · `LayerCardSecondary` | Available |
@@ -45,6 +47,7 @@ npx kumo-vue@latest add button
 | `LocaleProvider` | Available |
 | `Meter` | Available |
 | `SkeletonLine` | Available |
+| `Table` · `TableHeader` · `TableHead` · `TableBody` · `TableRow` · `TableCell` · `TableFooter` · `TableCheckCell` · `TableCheckHead` · `TableResizeHandle` | Available |
 | `Tabs` | Available |
 | `Text` | Available |
 | `Toaster` · `toast` | Available |
