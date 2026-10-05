@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { flushPromises, mount } from "@vue/test-utils";
 
 import Combobox from "../src/combobox/Combobox.vue";
@@ -91,5 +91,24 @@ describe("Combobox", () => {
     const wrapper = mountCombobox({ disabled: true });
     expect(wrapper.find("input").attributes("disabled")).toBeDefined();
     expect(wrapper.find(".kv-combobox__field").attributes("data-disabled")).toBe("");
+  });
+  it("opens the popup search empty even with a selection", async () => {
+    mountCombobox({ trigger: "value", items: [{ label: "English", value: "en" }], modelValue: "en", open: true });
+    await flushPromises();
+    expect(document.body.querySelector(".kv-combobox__search").value).toBe("");
+  });
+
+  it("anchors the multiple popup to the text input, not the chip box", async () => {
+    vi.stubGlobal("IntersectionObserver", class { observe() {} unobserve() {} disconnect() {} });
+    const wrapper = mountCombobox({ multiple: true, modelValue: ["Apple"] });
+    const rect = (width) => ({ x: 0, y: 0, top: 0, left: 0, right: width, bottom: 20, width, height: 20, toJSON() {} });
+    wrapper.find(".kv-combobox__chips").element.getBoundingClientRect = () => rect(400);
+    wrapper.find(".kv-combobox__chips-input").element.getBoundingClientRect = () => rect(123);
+    await wrapper.setProps({ open: true });
+    await flushPromises();
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    const popup = document.body.querySelector('[data-kumo-part="popup"]');
+    expect(popup.closest("[data-reka-popper-content-wrapper]").style.getPropertyValue("--reka-popper-anchor-width")).toBe("123px");
+    vi.unstubAllGlobals();
   });
 });

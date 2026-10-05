@@ -1,6 +1,7 @@
 <!-- Ported from Cloudflare Kumo's Toolbar.Input (MIT). See /NOTICE. -->
 <script setup>
 /** A text input inside the toolbar. Arrow keys move the caret until it reaches an end. */
+import "../shared/field.css";
 import { computed, inject } from "vue";
 import { TOOLBAR, TOOLBAR_ITEM } from "../shared/toolbar.js";
 
@@ -48,7 +49,3 @@ function blockWhenDisabled(event) {
     @input="$emit('update:modelValue', $event.target.value)"
   />
 </template>
-
-<style>
-@import "../shared/field.css";
-</style>

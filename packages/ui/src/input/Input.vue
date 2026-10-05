@@ -14,6 +14,7 @@
  * and Autocomplete already take `label` / `description` / `error` directly -
  * so the field markup lives in the component, as it does in those two.
  */
+import "../shared/field.css";
 import { computed, useAttrs, useId, watchEffect } from "vue";
 
 defineOptions({ inheritAttrs: false });
@@ -175,7 +176,3 @@ if (import.meta.env?.DEV) {
     </p>
   </div>
 </template>
-
-<style>
-@import "../shared/field.css";
-</style>

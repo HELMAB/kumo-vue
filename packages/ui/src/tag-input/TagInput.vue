@@ -9,6 +9,7 @@
  * field takes the last chip back. Blur commits too, because a value typed and
  * then abandoned is almost always one the user thought they had added.
  */
+import "../shared/field.css";
 import { computed, ref, useAttrs, useId } from "vue";
 
 import { Button } from "../button/index.js";
@@ -180,9 +181,6 @@ function onInput(event) {
 </template>
 
 <style>
-/* The field furniture and `.kv-input` itself, which this component wears. */
-@import "../shared/field.css";
-
 /*
  * Input's field, grown to fit its contents. The height becomes a floor rather
  * than a fixed value, because the chips wrap and the field has to follow them.

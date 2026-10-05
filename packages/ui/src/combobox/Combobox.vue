@@ -4,6 +4,7 @@
  * A typeahead picker constrained to its items: an input trigger, a value button with search
  * inside the popup, or chips for `multiple`. Items take the same shapes as Select's.
  */
+import "../shared/field.css";
 import { computed, ref, useId, useSlots } from "vue";
 import {
   ComboboxAnchor,
@@ -132,16 +133,16 @@ const controlClasses = computed(() => ["kv-input", `kv-input--size-${size.value}
       @update:model-value="update"
       @update:open="emit('update:open', $event)"
     >
-      <ComboboxAnchor v-if="multiple" as-child>
-        <div
-          v-bind="$attrs"
-          :class="[...controlClasses, 'kv-combobox__chips', `kv-combobox__chips--${inputSide}`]"
-          :data-disabled="disabled ? '' : undefined"
-          data-kumo-component="Combobox"
-          data-kumo-part="chips"
-        >
+      <div
+        v-if="multiple"
+        v-bind="$attrs"
+        :class="[...controlClasses, 'kv-combobox__chips', `kv-combobox__chips--${inputSide}`]"
+        :data-disabled="disabled ? '' : undefined"
+        data-kumo-component="Combobox"
+        data-kumo-part="chips"
+      >
+        <ComboboxAnchor v-if="inputSide === 'top'" as-child>
           <ComboboxInput
-            v-if="inputSide === 'top'"
             :id="inputId"
             v-model="searchTerm"
             class="kv-combobox__chips-input kv-combobox__chips-input--top"
@@ -150,25 +151,26 @@ const controlClasses = computed(() => ["kv-input", `kv-input--size-${size.value}
             :aria-describedby="describedBy"
             @keydown="onChipsKeydown"
           />
-          <div class="kv-combobox__chip-row">
-            <span v-for="value in selected" :key="String(value?.value ?? value)" class="kv-combobox__chip" data-kumo-part="chip">
-              <slot name="chip" :value="value" :item="optionFor(value)?.raw" :label="labelFor(value)">{{ labelFor(value) }}</slot>
-              <button
-                type="button"
-                class="kv-combobox__chip-remove"
-                data-kumo-component="Combobox"
-                data-kumo-part="chip-remove"
-                :aria-label="removeLabel"
-                :disabled="disabled"
-                @click="remove(value)"
-              >
-                <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" width="10" height="10">
-                  <path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z" />
-                </svg>
-              </button>
-            </span>
+        </ComboboxAnchor>
+        <div class="kv-combobox__chip-row">
+          <span v-for="value in selected" :key="String(value?.value ?? value)" class="kv-combobox__chip" data-kumo-part="chip">
+            <slot name="chip" :value="value" :item="optionFor(value)?.raw" :label="labelFor(value)">{{ labelFor(value) }}</slot>
+            <button
+              type="button"
+              class="kv-combobox__chip-remove"
+              data-kumo-component="Combobox"
+              data-kumo-part="chip-remove"
+              :aria-label="removeLabel"
+              :disabled="disabled"
+              @click="remove(value)"
+            >
+              <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" width="10" height="10">
+                <path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z" />
+              </svg>
+            </button>
+          </span>
+          <ComboboxAnchor v-if="inputSide !== 'top'" as-child>
             <ComboboxInput
-              v-if="inputSide !== 'top'"
               :id="inputId"
               v-model="searchTerm"
               class="kv-combobox__chips-input"
@@ -177,9 +179,9 @@ const controlClasses = computed(() => ["kv-input", `kv-input--size-${size.value}
               :aria-describedby="describedBy"
               @keydown="onChipsKeydown"
             />
-          </div>
+          </ComboboxAnchor>
         </div>
-      </ComboboxAnchor>
+      </div>
 
       <ComboboxAnchor v-else-if="$slots.trigger" as-child>
         <ComboboxTrigger v-bind="$attrs" as-child data-kumo-component="Combobox" data-kumo-part="trigger">
@@ -238,6 +240,7 @@ const controlClasses = computed(() => ["kv-input", `kv-input--size-${size.value}
             v-if="(trigger === 'value' || $slots.trigger) && !multiple && searchable"
             class="kv-input kv-input--size-base kv-combobox__search"
             :placeholder="searchPlaceholder"
+            :display-value="() => ''"
           />
           <ComboboxEmpty class="kv-combobox__empty">
             <slot name="empty">{{ emptyMessage }}</slot>
@@ -276,8 +279,6 @@ const controlClasses = computed(() => ["kv-input", `kv-input--size-${size.value}
 </template>
 
 <style>
-@import "../shared/field.css";
-
 .kv-combobox {
   --kv-combobox-icon: 16px;
   --kv-combobox-caret-end: var(--kv-space-2);
@@ -339,12 +340,12 @@ const controlClasses = computed(() => ["kv-input", `kv-input--size-${size.value}
   opacity: 0.5;
 }
 
-.kv-combobox__input {
+.kv-input.kv-combobox__input {
   inline-size: 100%;
   padding-inline-end: var(--kv-combobox-input-pad);
 }
 
-.kv-combobox__input:disabled {
+.kv-input.kv-combobox__input:disabled {
   cursor: not-allowed;
   opacity: 1;
 }
@@ -383,7 +384,7 @@ const controlClasses = computed(() => ["kv-input", `kv-input--size-${size.value}
 
 /* Value trigger */
 
-.kv-combobox__value {
+.kv-input.kv-combobox__value {
   position: relative;
   display: flex;
   align-items: center;
@@ -392,11 +393,11 @@ const controlClasses = computed(() => ["kv-input", `kv-input--size-${size.value}
   cursor: pointer;
 }
 
-.kv-combobox__value[data-placeholder] {
+.kv-input.kv-combobox__value[data-placeholder] {
   color: var(--kv-text-placeholder);
 }
 
-.kv-combobox__value[data-disabled] {
+.kv-input.kv-combobox__value[data-disabled] {
   cursor: not-allowed;
   opacity: 0.5;
 }
@@ -419,7 +420,7 @@ const controlClasses = computed(() => ["kv-input", `kv-input--size-${size.value}
 
 /* Chips */
 
-.kv-combobox__chips {
+.kv-input.kv-combobox__chips {
   display: flex;
   flex-direction: column;
   gap: var(--kv-space-1);
@@ -428,12 +429,12 @@ const controlClasses = computed(() => ["kv-input", `kv-input--size-${size.value}
   padding: var(--kv-space-1) var(--kv-space-1-5);
 }
 
-.kv-combobox__chips:focus-within {
+.kv-input.kv-combobox__chips:focus-within {
   --kv-input-ring-width: 1.5px;
   --kv-input-ring: color-mix(in oklab, var(--kv-focus) 50%, transparent);
 }
 
-.kv-combobox__chips[data-disabled] {
+.kv-input.kv-combobox__chips[data-disabled] {
   cursor: not-allowed;
   opacity: 0.5;
 }
@@ -512,7 +513,7 @@ const controlClasses = computed(() => ["kv-input", `kv-input--size-${size.value}
   font-family: var(--kv-font-sans);
 }
 
-.kv-combobox__search {
+.kv-input.kv-combobox__search {
   flex-shrink: 0;
   inline-size: 100%;
   margin: calc(var(--kv-space-1-5) * -1) 0 0;
@@ -520,7 +521,7 @@ const controlClasses = computed(() => ["kv-input", `kv-input--size-${size.value}
   border-end-end-radius: 0;
 }
 
-.kv-combobox__search:first-child {
+.kv-input.kv-combobox__search:first-child {
   margin-block-end: var(--kv-space-2);
 }
 

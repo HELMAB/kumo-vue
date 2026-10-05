@@ -530,6 +530,41 @@ const COMPONENTS = [
       { source: "pagination/index.js", path: "pagination/index.js" },
     ],
   },
+  {
+    name: "combobox",
+    description: "Typeahead picker constrained to its items, with single, value and chip triggers.",
+    export: "Combobox",
+    dependencies: ["reka-ui", "@kumo-vue/tokens"],
+    registryDependencies: ["shared", "label"],
+    files: [
+      { source: "combobox/Combobox.vue", path: "combobox/Combobox.vue" },
+      { source: "combobox/index.js", path: "combobox/index.js" },
+    ],
+  },
+  {
+    name: "locale-provider",
+    description: "App-wide strings for the text components render on their own.",
+    export: "LocaleProvider",
+    dependencies: [],
+    registryDependencies: [],
+    files: [
+      { source: "locale-provider/LocaleProvider.vue", path: "locale-provider/LocaleProvider.vue" },
+      { source: "locale-provider/context.js", path: "locale-provider/context.js" },
+      { source: "locale-provider/index.js", path: "locale-provider/index.js" },
+    ],
+  },
+  {
+    name: "layer-dialog",
+    description: "Responsive dialog with a sticky title inside its scrolling body; a bottom sheet on mobile.",
+    export: "LayerDialog",
+    dependencies: ["reka-ui", "@kumo-vue/tokens"],
+    registryDependencies: ["button", "button-group", "dropdown", "locale-provider", "text"],
+    files: [
+      { source: "layer-dialog/LayerDialog.vue", path: "layer-dialog/LayerDialog.vue" },
+      { source: "layer-dialog/LayerDialogAction.vue", path: "layer-dialog/LayerDialogAction.vue" },
+      { source: "layer-dialog/index.js", path: "layer-dialog/index.js" },
+    ],
+  },
 ];
 
 await mkdir(OUT, { recursive: true });

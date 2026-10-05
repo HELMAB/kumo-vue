@@ -12,6 +12,7 @@
  * two-state version leaves you unable to tell "not set yet" from "set and
  * hidden", and they want opposite affordances.
  */
+import "../shared/field.css";
 import { computed, ref, useAttrs, useId, watch } from "vue";
 
 defineOptions({ inheritAttrs: false });
@@ -234,9 +235,6 @@ async function copy() {
 </template>
 
 <style>
-/* The field furniture and `.kv-input` itself, which this component wears. */
-@import "../shared/field.css";
-
 /* Input's field, with room at the end for the two buttons. */
 .kv-sensitive {
   position: relative;

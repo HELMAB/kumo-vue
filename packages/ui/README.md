@@ -30,6 +30,7 @@ npx kumo-vue@latest add button
 | `ClipboardText` | Available |
 | `CloudflareLogo` · `PoweredByCloudflare` | Available |
 | `Collapsible` | Available |
+| `Combobox` | Available |
 | `CommandPalette` | Available |
 | `DatePicker` | Available |
 | `Dialog` | Available |
@@ -38,8 +39,10 @@ npx kumo-vue@latest add button
 | `Grid` · `GridItem` | Available |
 | `InlineCopyText` | Available |
 | `LayerCard` · `LayerCardPrimary` · `LayerCardSecondary` | Available |
+| `LayerDialog` · `LayerDialogAction` | Available |
 | `Link` · `LinkExternalIcon` · `LinkProvider` | Available |
 | `Loader` | Available |
+| `LocaleProvider` | Available |
 | `Meter` | Available |
 | `SkeletonLine` | Available |
 | `Tabs` | Available |

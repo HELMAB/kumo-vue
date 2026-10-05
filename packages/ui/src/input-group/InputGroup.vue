@@ -18,6 +18,7 @@
  * `detectFocusMode`. Kumo reads its children's `displayName`; this reads the
  * vnodes' component names, which is the same trick in Vue's terms.
  */
+import "../shared/field.css";
 import { computed, useId, useSlots } from "vue";
 
 import { detectFocusMode, partition, provideInputGroup } from "./context.js";
@@ -158,9 +159,6 @@ const groupClasses = computed(() => [
 </template>
 
 <style>
-/* The field furniture and `.kv-input` itself, which this component wears. */
-@import "../shared/field.css";
-
 /*
  * The row. Kumo builds it from `inputVariants({ size })` - the same height,
  * radius, surface and ring as a bare Input - then zeroes the horizontal

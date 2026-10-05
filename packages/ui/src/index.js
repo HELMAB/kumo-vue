@@ -21,8 +21,10 @@ export { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGr
 export { Input } from "./input/index.js";
 export { Label } from "./label/index.js";
 export { LayerCard, LayerCardPrimary, LayerCardSecondary } from "./layer-card/index.js";
+export { LayerDialog, LayerDialogAction } from "./layer-dialog/index.js";
 export { Link, LinkExternalIcon, LinkProvider } from "./link/index.js";
 export { Loader } from "./loader/index.js";
+export { LocaleProvider, useTranslations } from "./locale-provider/index.js";
 export { Meter } from "./meter/index.js";
 export { Pagination, PaginationControls, PaginationInfo, PaginationPageSize, PaginationSeparator } from "./pagination/index.js";
 export { Popover } from "./popover/index.js";

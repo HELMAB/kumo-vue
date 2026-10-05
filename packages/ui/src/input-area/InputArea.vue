@@ -13,6 +13,7 @@
  * first name is here: an alias export is a thing a copied component cannot
  * give you anyway.
  */
+import "../shared/field.css";
 import { computed, nextTick, ref, useAttrs, useId, watch, watchEffect } from "vue";
 
 import { useAutoResize } from "./useAutoResize.js";
@@ -184,9 +185,6 @@ defineExpose({ resize });
 </template>
 
 <style>
-/* The field furniture and `.kv-input` itself, which this component wears. */
-@import "../shared/field.css";
-
 /*
  * Everything but the height comes from `.kv-input`, which this element also
  * carries. Kumo does the same - `inputVariants({ size }) + "h-auto py-2"` -
