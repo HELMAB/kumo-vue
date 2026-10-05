@@ -1,3 +1,4 @@
+<!-- Ported from Cloudflare Kumo's Sidebar.Loading (MIT). See /NOTICE. -->
 <script setup>
 /** Nav-shaped placeholder rows to show in place of `SidebarContent` while the nav loads. */
 import { SkeletonLine } from "../skeleton-line/index.js";

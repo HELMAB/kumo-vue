@@ -1,3 +1,4 @@
+<!-- Ported from Cloudflare Kumo's Sidebar.MenuItem (MIT). See /NOTICE. -->
 <script setup>
 /** A menu list item. Needed explicitly only to wrap a `SidebarCollapsible`. */
 import { onBeforeUnmount, onMounted, provide, ref } from "vue";

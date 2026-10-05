@@ -1,3 +1,4 @@
+<!-- Ported from Cloudflare Kumo's Table.CheckHead (MIT). See /NOTICE. -->
 <script setup>
 /** A header cell holding the select-all checkbox; the whole cell is the hit area. */
 import { Checkbox } from "../checkbox/index.js";

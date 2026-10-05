@@ -1,3 +1,4 @@
+<!-- Ported from Cloudflare Kumo's Sidebar.MenuSubItem (MIT). See /NOTICE. -->
 <script setup>
 /** A sub-menu list item. Needed explicitly only to wrap a `SidebarCollapsible`. */
 import { provide } from "vue";

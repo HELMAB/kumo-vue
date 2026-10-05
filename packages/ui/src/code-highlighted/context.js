@@ -1,3 +1,4 @@
+// Ported from Cloudflare Kumo's useShikiHighlighter (MIT). See /NOTICE.
 import { computed, inject } from "vue";
 import { normalizeLanguage } from "./languages.js";
 

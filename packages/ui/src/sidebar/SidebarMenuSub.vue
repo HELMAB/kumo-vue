@@ -1,3 +1,4 @@
+<!-- Ported from Cloudflare Kumo's Sidebar.MenuSub (MIT). See /NOTICE. -->
 <script setup>
 /** An indented sub-menu with a guide line. `SidebarMenuSubButton` wraps itself in an item. */
 import "./context.js";

@@ -125,7 +125,7 @@ const contentWidth = computed(() => (sidebar.open || sidebar.isPeeking ? expande
       tabindex="-1"
       aria-label="Navigation"
       :aria-hidden="!sidebar.openMobile"
-      :inert="!sidebar.openMobile"
+      :inert="!sidebar.openMobile || undefined"
       :data-state="sidebar.openMobile ? 'expanded' : 'collapsed'"
       :data-side="sidebar.side"
       :data-variant="sidebar.variant"

@@ -1,3 +1,4 @@
+<!-- Ported from Cloudflare Kumo's Table.Cell (MIT). See /NOTICE. -->
 <script setup>
 /** A body cell, a `<td>`. */
 defineProps({

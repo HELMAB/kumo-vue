@@ -1,3 +1,4 @@
+<!-- Ported from Cloudflare Kumo's Sidebar.Content (MIT). See /NOTICE. -->
 <script setup>
 /** The scrolling middle of the sidebar, with a fade where content runs past an edge. */
 import { computed, onBeforeUnmount, ref } from "vue";

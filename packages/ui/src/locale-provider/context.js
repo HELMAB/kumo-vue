@@ -1,3 +1,4 @@
+// Ported from Cloudflare Kumo's KumoLocaleProvider (MIT). See /NOTICE.
 import { computed, inject } from "vue";
 
 export const LOCALE = Symbol("kv-locale");

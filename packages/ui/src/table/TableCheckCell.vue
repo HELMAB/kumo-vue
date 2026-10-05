@@ -1,3 +1,4 @@
+<!-- Ported from Cloudflare Kumo's Table.CheckCell (MIT). See /NOTICE. -->
 <script setup>
 /** A body cell holding a row's selection checkbox; the whole cell is the hit area. */
 import { Checkbox } from "../checkbox/index.js";

@@ -1,3 +1,4 @@
+<!-- Ported from Cloudflare Kumo's Sidebar.GroupLabel (MIT). See /NOTICE. -->
 <script setup>
 /** A group's heading. Collapsed, it becomes a thin divider between icon groups, except above the first. */
 import "./context.js";

@@ -1,3 +1,4 @@
+<!-- Ported from Cloudflare Kumo's Table.ResizeHandle (MIT). See /NOTICE. -->
 <script setup>
 /** A column resize grip for the end of a `TableHead`, shown on hover. Wire the drag up yourself. */
 defineProps({

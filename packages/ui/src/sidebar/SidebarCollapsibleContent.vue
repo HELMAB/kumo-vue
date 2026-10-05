@@ -29,7 +29,7 @@ function onTransitionEnd(event) {
     :class="{ 'kv-sidebar__collapsible-content--shown': collapse.isShown.value }"
     role="region"
     :aria-hidden="!collapse.isShown.value"
-    :inert="!collapse.isShown.value"
+    :inert="!collapse.isShown.value || undefined"
     @transitionend="onTransitionEnd"
   >
     <div class="kv-sidebar__collapsible-clip"><slot /></div>

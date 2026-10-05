@@ -1,3 +1,4 @@
+<!-- Ported from Cloudflare Kumo's Table.Row (MIT). See /NOTICE. -->
 <script setup>
 /** A row, a `<tr>`. Even rows are striped. */
 defineProps({

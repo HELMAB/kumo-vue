@@ -1,3 +1,4 @@
+<!-- Ported from Cloudflare Kumo's Table.Head (MIT). See /NOTICE. -->
 <script setup>
 /** A header cell, a `<th>`. */
 defineProps({

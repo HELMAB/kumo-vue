@@ -1,3 +1,4 @@
+// Ported from Cloudflare Kumo's Flow (MIT). See /NOTICE.
 import { computed, inject, onBeforeUnmount, onMounted, onUpdated, provide, shallowRef, useId } from "vue";
 
 export const FLOW = Symbol("kv-flow");

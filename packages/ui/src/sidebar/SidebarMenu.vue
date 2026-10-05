@@ -1,3 +1,4 @@
+<!-- Ported from Cloudflare Kumo's Sidebar.Menu (MIT). See /NOTICE. -->
 <script setup>
 /** A list of menu items. `SidebarMenuButton` wraps itself in an item, so `SidebarMenuItem` is only needed around a collapsible. */
 import "./context.js";

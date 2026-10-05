@@ -46,6 +46,7 @@ npx kumo-vue@latest add button
 | `Loader` | Available |
 | `LocaleProvider` | Available |
 | `Meter` | Available |
+| `Sidebar` · `SidebarProvider` · 24 parts · `useSidebar` | Available |
 | `SkeletonLine` | Available |
 | `Table` · `TableHeader` · `TableHead` · `TableBody` · `TableRow` · `TableCell` · `TableFooter` · `TableCheckCell` · `TableCheckHead` · `TableResizeHandle` | Available |
 | `Tabs` | Available |

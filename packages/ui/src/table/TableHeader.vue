@@ -1,3 +1,4 @@
+<!-- Ported from Cloudflare Kumo's Table.Header (MIT). See /NOTICE. -->
 <script setup>
 /** The table's header section, a `<thead>`. */
 defineProps({

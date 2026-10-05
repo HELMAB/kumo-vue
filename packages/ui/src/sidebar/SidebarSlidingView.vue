@@ -22,7 +22,7 @@ const isActive = computed(() => sliding.activeKey.value === props.value);
     data-sidebar="sliding-view"
     :data-value="value"
     :aria-hidden="!isActive"
-    :inert="!isActive"
+    :inert="!isActive || undefined"
   >
     <slot />
   </div>
