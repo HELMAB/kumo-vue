@@ -1,6 +1,6 @@
 # `kumo-vue`
 
-Add [Kumo Vue](https://github.com/kumo-vue/kumo-vue) components to your Vue 3
+Add [Kumo Vue](https://github.com/HELMAB/kumo-vue) components to your Vue 3
 or Nuxt 3 project.
 
 ```sh

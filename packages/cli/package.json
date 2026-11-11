@@ -3,6 +3,15 @@
   "version": "0.1.0",
   "description": "Add Kumo Vue components to your Vue 3 project. Copies source into your repo - you own it from there.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HELMAB/kumo-vue.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://github.com/HELMAB/kumo-vue/tree/master/packages/cli#readme",
+  "bugs": {
+    "url": "https://github.com/HELMAB/kumo-vue/issues"
+  },
   "type": "module",
   "bin": {
     "kumo-vue": "bin/kumo-vue.js"
@@ -11,7 +20,10 @@
     "bin",
     "src",
     "registry",
-    "README.md"
+    "README.md",
+    "LICENSE",
+    "NOTICE",
+    "LICENSES"
   ],
   "engines": {
     "node": ">=18"
@@ -19,7 +31,8 @@
   "scripts": {
     "build": "node scripts/build-registry.js",
     "test": "node --test 'test/*.test.js'",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "prepack": "node -e \"for (const f of ['LICENSE','NOTICE','LICENSES']) require('fs').cpSync('../../'+f, f, {recursive: true})\""
   },
   "keywords": [
     "vue",

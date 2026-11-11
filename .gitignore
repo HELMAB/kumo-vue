@@ -7,3 +7,8 @@ demo/
 kumo-ui-docs/
 # Generated from packages/ui by `npm run build -w kumo-vue`
 packages/cli/registry/
+
+# Copied from the repo root by each package's `prepack` script
+packages/*/LICENSE
+packages/*/NOTICE
+packages/*/LICENSES/
